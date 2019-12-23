@@ -15,7 +15,12 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Random;
 
 /**
@@ -32,11 +37,11 @@ public class Tochka extends TajimaLabAI {
     private double[][] middle1Weight;
     private double[][] middle2Weight;
     private double[][] outWeight;
-    
+
     private String middle1Out;
     private String middle2Out;
     private double[] output;
-    
+
     public static Action[] actions = {
         new Action("S", "1-1", "F"),
         new Action("S", "1-1", "G"),
@@ -71,7 +76,6 @@ public class Tochka extends TajimaLabAI {
         new Action("P", "7-1", "T4"),
         new Action("P", "7-1", "T5")
     };
-    
 
 //    private static final int PREFETCH_MAX_LEVEL = 8;    // 先読みの最高階数
 //
@@ -99,6 +103,27 @@ public class Tochka extends TajimaLabAI {
     public Tochka(Game game) {
         super(game);
         this.myName = "Tochka";
+
+        // とりあえずランダムで生成
+        this.middle1Weight = new double[60][16];
+        Random rand = new Random();
+        for (int i = 0; i < 60; i++) {
+            for (int j = 0; j < 16; j++) {
+                this.middle1Weight[i][j] = 2 * rand.nextDouble() - 1.0;
+            }
+        }
+        this.middle2Weight = new double[16][10];
+        for (int i = 0; i < 16; i++) {
+            for (int j = 0; j < 10; j++) {
+                this.middle2Weight[i][j] = 2 * rand.nextDouble() - 1.0;
+            }
+        }
+        this.outWeight = new double[10][32];
+        for (int i = 0; i < 10; i++) {
+            for (int j = 0; j < 32; j++) {
+                this.outWeight[i][j] = 2 * rand.nextDouble() - 1.0;
+            }
+        }
     }
 
     /**
@@ -269,76 +294,79 @@ public class Tochka extends TajimaLabAI {
         return cloneGame;
     }
 
-    private void neuralNet(NeuralInput input) {
-        // とりあえずランダムで生成
-        this.middle1Weight = new double[60][16];
-        Random rand = new Random();
-        for (int i = 0; i < 60; i++) {
-            for (int j = 0; j < 16; j++) {
-                this.middle1Weight[i][j] = 2 * rand.nextDouble() - 1.0;
-            }
-        }
-        this.middle2Weight = new double[16][10];
-        for (int i = 0; i < 16; i++) {
-            for (int j = 0; j < 10; j++) {
-                this.middle2Weight[i][j] = 2 * rand.nextDouble() - 1.0;
-            }
-        }
-        this.outWeight = new double[10][32];
-        for (int i = 0; i < 10; i++) {
-            for (int j = 0; j < 32; j++) {
-                this.outWeight[i][j] = 2 * rand.nextDouble() - 1.0;
-            }
-        }
-        
+    private Action neuralNet(NeuralInput input) {
+
         // 1層目 畳み込む
         String in = input.getRowVal();
         for (int j = 0; j < 16; j++) {
             double sum = 0.0;
             for (int i = 0; i < 60; i++) {
-                sum += Integer.parseInt(in.substring(i,i+1)) * middle1Weight[i][j];
+                sum += Integer.parseInt(in.substring(i, i + 1)) * middle1Weight[i][j];
             }
             if (sum >= 0) {
                 this.middle1Out += "1";
-            }
-            else {
+            } else {
                 this.middle1Out += "0";
             }
         }
-        
+
         addMessage("[1st]: " + middle1Out);
-        
+
         // 2層目 畳み込む
         for (int j = 0; j < 10; j++) {
             double sum = 0.0;
             for (int i = 0; i < 16; i++) {
-                sum += Integer.parseInt(in.substring(i,i+1)) * middle2Weight[i][j];
+                sum += Integer.parseInt(in.substring(i, i + 1)) * middle2Weight[i][j];
             }
-            if (sum >= 0){
+            if (sum >= 0) {
                 this.middle2Out += "1";
-            }
-            else {
+            } else {
                 this.middle2Out += "0";
             }
         }
-        
+
         addMessage("[1st]: " + middle2Out);
-        
+
         // 出口 畳み込む
         output = new double[32];
+        double total = 0;
         for (int j = 0; j < 32; j++) {
             double sum = 0.0;
             for (int i = 0; i < 10; i++) {
-                sum += Integer.parseInt(in.substring(i, i+1)) * outWeight[i][j];
+                sum += Integer.parseInt(in.substring(i, i + 1)) * outWeight[i][j];
             }
             output[j] = sum;
         }
-        
-        addMessage("====output====");
+
+        // 順位づけする
+        Map<Action, Double> map = new HashMap<>();
         for (int i = 0; i < 32; i++) {
-            addMessage("Output[" + i + "] = " + output[i]);
+            map.put(actions[i], output[i]);
         }
-        
+        List<Map.Entry<Action, Double>> listEntrys = new ArrayList<Entry<Action, Double>>(map.entrySet());
+        Collections.sort(listEntrys, (Entry<Action, Double> o1, Entry<Action, Double> o2) -> o2.getValue().compareTo(o1.getValue()));
+        addMessage("====output====");
+        for (Entry<Action, Double> entry : listEntrys) {
+            addMessage(entry.getKey() + ":" + entry.getValue());
+        }
+
+        // 上から順に打てるものを確認する
+        for (Entry<Action, Double> entry : listEntrys) {
+            Action a = entry.getKey();
+            String w = a.worker;
+            String p = a.place;
+            String o = a.option;
+            if (this.gameBoard.canPutWorker(myNumber, p, w, o)) {
+                return a;
+            } else if (this.gameBoard.canPutWorker(myNumber, p, "P", o)) {
+                return new Action("P", p, o);
+            }
+        }
+        if (this.gameBoard.canPutWorker(myNumber, "S", "1-1", "M")) {
+            return new Action("S", "1-1", "M");
+        } else {
+            return new Action("P", "1-1", "M");
+        }
     }
 
     /**
@@ -362,17 +390,11 @@ public class Tochka extends TajimaLabAI {
 
         addMessage("inputLength: " + input.getLength());
         addMessage("rowInput: " + input.getRowVal());
-        
+
         middle1Out = "";
         middle2Out = "";
-        
-        neuralNet(input);
 
-        if (myResources.hasWorkerOf("S")) {
-            bestAction = new Action("S", "1-1", "M");
-        } else {
-            bestAction = new Action("P", "1-1", "M");
-        }
+        bestAction = neuralNet(input);
 
         this.addMessage("===========================");
         this.addMessage("========== think end ==========");
