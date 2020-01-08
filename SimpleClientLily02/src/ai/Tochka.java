@@ -316,7 +316,7 @@ public class Tochka extends TajimaLabAI {
         for (int j = 0; j < 10; j++) {
             double sum = 0.0;
             for (int i = 0; i < 16; i++) {
-                sum += Integer.parseInt(in.substring(i, i + 1)) * middle2Weight[i][j];
+                sum += Integer.parseInt(middle1Out.substring(i, i + 1)) * middle2Weight[i][j];
             }
             if (sum >= 0) {
                 this.middle2Out += "1";
@@ -333,7 +333,7 @@ public class Tochka extends TajimaLabAI {
         for (int j = 0; j < 32; j++) {
             double sum = 0.0;
             for (int i = 0; i < 10; i++) {
-                sum += Integer.parseInt(in.substring(i, i + 1)) * outWeight[i][j];
+                sum += Integer.parseInt(middle2Out.substring(i, i + 1)) * outWeight[i][j];
             }
             output[j] = sum;
         }
@@ -382,9 +382,6 @@ public class Tochka extends TajimaLabAI {
         this.handCount += 1;
 
         Action bestAction = null;
-
-        GameResources myResources = this.gameBoard.getResourcesOf(myNumber);
-        GameResources enemyResources = this.gameBoard.getResourcesOf(enemyNumber);
 
         NeuralInput input = new NeuralInput(gameBoard, myNumber, handCount);
 
