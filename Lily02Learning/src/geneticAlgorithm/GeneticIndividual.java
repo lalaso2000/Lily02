@@ -25,21 +25,69 @@ import java.util.logging.Logger;
  */
 public class GeneticIndividual implements Comparable<GeneticIndividual> {
 
-    public static final int CHROMOSOME_LENGTH = 840;
-    public static final int SEASON_LENGTH = 12;
-    public static final int EACH_SEASON_LENGTH = 70;
     public static final double GAUSSIAN_SIGMA = 0.01;
+    // 各層の重み
+    private double[][] middle1Weight;
+    private double[][] middle2Weight;
+    private double[][] outWeight;
+    // 各層の長さ
+    public static final int INPUT_LENGTH = 60;
+    public static final int MIDDLE_1_LENGTH = 16;
+    public static final int MIDDLE_2_LENGTH = 10;
+    public static final int OUTPUT_LENGTH = 32;
+    // 重みを一列にしたもの：遺伝子
+    public static final int CHROMOSOME_LENGTH = INPUT_LENGTH * MIDDLE_1_LENGTH + MIDDLE_1_LENGTH * MIDDLE_2_LENGTH + MIDDLE_2_LENGTH * OUTPUT_LENGTH;
     private double[] genes = new double[CHROMOSOME_LENGTH];
     private int win = 0;
     private int totalScore = 0;
 
     /**
+     * middle1Weight / middle2Weight / outputWeightを一列にする
+     */
+    private void serialize() {
+        for (int i = 0; i < INPUT_LENGTH; i++) {
+            for (int j = 0; j < MIDDLE_1_LENGTH; j++) {
+                this.genes[i * MIDDLE_1_LENGTH + j] = this.middle1Weight[i][j];
+            }
+        }
+        for (int i = 0; i < MIDDLE_1_LENGTH; i++) {
+            for (int j = 0; j < MIDDLE_2_LENGTH; j++) {
+                this.genes[i * MIDDLE_2_LENGTH + j + INPUT_LENGTH * MIDDLE_1_LENGTH] = this.middle2Weight[i][j];
+            }
+        }
+        for (int i = 0; i < MIDDLE_2_LENGTH; i++) {
+            for (int j = 0; j < OUTPUT_LENGTH; j++) {
+                this.genes[i * OUTPUT_LENGTH + j + INPUT_LENGTH * MIDDLE_1_LENGTH + MIDDLE_1_LENGTH * MIDDLE_2_LENGTH] = this.outWeight[i][j];
+            }
+        }
+    }
+
+    /**
      * ランダムに生成する
      */
     public GeneticIndividual() {
-        for (int i = 0; i < CHROMOSOME_LENGTH; i++) {
-            genes[i] = this.rand();
+        // とりあえずランダムで生成
+        this.middle1Weight = new double[INPUT_LENGTH][MIDDLE_1_LENGTH];
+        Random rand = new Random();
+        for (int i = 0; i < INPUT_LENGTH; i++) {
+            for (int j = 0; j < MIDDLE_1_LENGTH; j++) {
+                this.middle1Weight[i][j] = 2 * rand.nextDouble() - 1.0;
+            }
         }
+        this.middle2Weight = new double[MIDDLE_1_LENGTH][MIDDLE_2_LENGTH];
+        for (int i = 0; i < MIDDLE_1_LENGTH; i++) {
+            for (int j = 0; j < MIDDLE_2_LENGTH; j++) {
+                this.middle2Weight[i][j] = 2 * rand.nextDouble() - 1.0;
+            }
+        }
+        this.outWeight = new double[MIDDLE_2_LENGTH][OUTPUT_LENGTH];
+        for (int i = 0; i < MIDDLE_2_LENGTH; i++) {
+            for (int j = 0; j < OUTPUT_LENGTH; j++) {
+                this.outWeight[i][j] = 2 * rand.nextDouble() - 1.0;
+            }
+        }
+        // 係数を一列にする
+        this.serialize();
     }
 
     /**
@@ -76,6 +124,10 @@ public class GeneticIndividual implements Comparable<GeneticIndividual> {
      * 係数をファイルから読み込む ファイル形式は、1行に各季節、フラスコ→ギア→…→スタプレの順
      */
     private void loadWeights(String filePath) {
+        // 係数を初期化
+        this.middle1Weight = new double[INPUT_LENGTH][MIDDLE_1_LENGTH];
+        this.middle2Weight = new double[MIDDLE_1_LENGTH][MIDDLE_2_LENGTH];
+        this.outWeight = new double[MIDDLE_2_LENGTH][OUTPUT_LENGTH];
         ArrayList<String> lines = new ArrayList<>();
 
         // ファイルを読み込む
@@ -101,33 +153,51 @@ public class GeneticIndividual implements Comparable<GeneticIndividual> {
         }
 
         // 行数が異なる
-        if (lines.size() != SEASON_LENGTH) {
+        if (lines.size() != INPUT_LENGTH + MIDDLE_1_LENGTH + MIDDLE_2_LENGTH) {
             System.err.println("csvの行数が不正です。");
-            return;
         }
 
         // 数値を読み込む
-        int seasonCount = 0;
+        int lineCount = 0;
         for (String line : lines) {
             String[] nums = line.split(",");
-            // 長さが不正
-            if (nums.length != EACH_SEASON_LENGTH) {
-                System.err.println(seasonCount + "番目の季節の染色体の長さが不正です。");
-                return;
+            int numCount = 0;
+            // 各行の数字の数を確認
+            if (0 <= lineCount && lineCount < INPUT_LENGTH) {
+                if (nums.length != MIDDLE_1_LENGTH) {
+                    System.err.println((lineCount + 1) + "行目の列数が異なります");
+                }
             }
-            int count = 0;
+            if (INPUT_LENGTH <= lineCount && lineCount < INPUT_LENGTH + MIDDLE_1_LENGTH) {
+                if (nums.length != MIDDLE_2_LENGTH) {
+                    System.err.println((lineCount + 1) + "行目の列数が異なります");
+                }
+            }
+            if (76 <= lineCount && lineCount < INPUT_LENGTH + MIDDLE_1_LENGTH + MIDDLE_2_LENGTH) {
+                if (nums.length != OUTPUT_LENGTH) {
+                    System.err.println((lineCount + 1) + "行目の列数が異なります");
+                }
+            }
             for (String num : nums) {
                 try {
                     double n = Double.parseDouble(num);
-                    // ひどくなくなった
-                    this.genes[seasonCount * EACH_SEASON_LENGTH + count] = n;
+                    if (0 <= lineCount && lineCount < INPUT_LENGTH) {
+                        this.middle1Weight[lineCount][numCount] = n;
+                    }
+                    if (INPUT_LENGTH <= lineCount && lineCount < INPUT_LENGTH + MIDDLE_1_LENGTH) {
+                        this.middle2Weight[lineCount - INPUT_LENGTH][numCount] = n;
+                    }
+                    if (76 <= lineCount && lineCount < INPUT_LENGTH + MIDDLE_1_LENGTH + MIDDLE_2_LENGTH) {
+                        this.outWeight[lineCount - INPUT_LENGTH - MIDDLE_1_LENGTH][numCount] = n;
+                    }
                 } catch (NumberFormatException ex) {
                     System.err.println("数値じゃないものが含まれています。");
                 }
-                count++;
+                numCount++;
             }
-            seasonCount++;
+            lineCount++;
         }
+        this.serialize();
     }
 
     public void outputCSV(String filePath) {
@@ -136,10 +206,6 @@ public class GeneticIndividual implements Comparable<GeneticIndividual> {
 
         // ファイルに書き込む
         try (PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(file)))) {
-            // 1行目はヘッダ的な
-            String line = "# Flask,Flask,Flask,Gear,Gear,Gear,Money,Money,Money,Money,Money,Money,Money,Money,Money,Money,Money,Money,Money,Money,Money,Money,Money,Money,Money,Money,Money,Money,Money,Money,Money,Money,Money,Money,Money,Money,Money,Money,Money,Trend,Trend,Trend,Score,Score,Score,T0,T1,T2,T3,T4,T5,T0T1,T0T2,T0T3,T0T4,T0T5,T1T2,T1T3,T1T4,T1T5,T2T3,T2T4,T2T5,T3T4,T3T5,T4T5,Tx3,StartPlayer,StartPlayer,StartPlayer";
-            pw.println(line);
-            // 2行目以降は書く
             pw.println(this);
             pw.close();
         } catch (IOException ex) {
@@ -251,11 +317,31 @@ public class GeneticIndividual implements Comparable<GeneticIndividual> {
     @Override
     public String toString() {
         String line = "";
-        // 1行は1季節
-        for (int season = 0; season < SEASON_LENGTH; season++) {
-            for (int i = 0; i < EACH_SEASON_LENGTH; i++) {
-                line += this.genes[season * EACH_SEASON_LENGTH + i];
-                if (i != (EACH_SEASON_LENGTH) - 1) {
+        // 1-60行はmiddle1Weight
+        for (int i = 0; i < INPUT_LENGTH; i++) {
+            for (int j = 0; j < MIDDLE_1_LENGTH; j++) {
+                line += this.middle1Weight[i][j];
+                if(j != MIDDLE_1_LENGTH-1) {
+                    line += ",";
+                }
+            }
+            line += "\n";
+        }
+        // 61-76行はmiddle2Weight
+        for (int i = 0; i < MIDDLE_1_LENGTH; i++) {
+            for (int j = 0; j < MIDDLE_2_LENGTH; j++) {
+                line += this.middle2Weight[i][j];
+                if(j != MIDDLE_2_LENGTH-1) {
+                    line += ",";
+                }
+            }
+            line += "\n";
+        }
+        // 77-86行はoutputWeight
+        for (int i = 0; i < MIDDLE_2_LENGTH; i++) {
+            for (int j = 0; j < OUTPUT_LENGTH; j++) {
+                line += this.outWeight[i][j];
+                if(j != OUTPUT_LENGTH-1) {
                     line += ",";
                 }
             }

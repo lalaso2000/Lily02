@@ -1,3 +1,4 @@
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -30,7 +31,7 @@ public class Lily0Learning {
     private static final int GROUP_NUM = 1;
     private static final double INDIVIDUAL_MUTATION_RATE = 0.05;
     private static final double GENOM_MUTATION_RATE = 0.025;
-    private static final String DIR_NAME = "outputs_v6";
+    private static final String DIR_NAME = "output";
 
     /**
      * @param args the command line arguments
