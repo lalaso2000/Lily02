@@ -8,6 +8,7 @@ package ai;
 import gameElements.Board;
 import gameElements.Game;
 import gameElements.GameResources;
+import geneticAlgorithm.GeneticIndividual;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -16,17 +17,15 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Random;
 
 /**
- * <h1> Tochka </h1>
+ * <h1> Lily0 </h1>
  *
- * <br> ニューラルネットワークを使うらしい
+ * ニューラルネットワークを使うらしい
  *
  * @author niwatakumi
  */
@@ -77,8 +76,9 @@ public class Tochka extends TajimaLabAI {
         new Action("P", "7-1", "T5")
     };
 
+    
 //    private static final int PREFETCH_MAX_LEVEL = 8;    // 先読みの最高階数
-//
+
 //    private double[][] flaskWeight = new double[12][3];
 //    private double[][] gearWeight = new double[12][3];
 //    private double[][][] moneyWeight = new double[12][11][3];
@@ -88,6 +88,23 @@ public class Tochka extends TajimaLabAI {
 //    private double[][] startPlayerWeight = new double[12][3];
 //
 //    private final List<String> PLACE_FOR_PROFESSOR = Arrays.asList("6-1", "6-2", "6-3", "7-1");
+
+    /**
+     * コンストラクタ for learning
+     *
+     * @param game
+     */
+    public Tochka(Game game, GeneticIndividual gi, int playerNum) {
+        super(game);
+        this.myName = "Lily 0";
+        this.myNumber = playerNum;
+        this.enemyNumber = (playerNum + 1) % 2;
+        // giから呼び出す
+        this.middle1Weight = gi.getMiddle1Weight();
+        this.middle2Weight = gi.getMiddle2Weight();
+        this.outWeight = gi.getOutWeight();
+    }
+
     /**
      * コンストラクタ for client
      *
@@ -205,82 +222,6 @@ public class Tochka extends TajimaLabAI {
         }
     }
 
-    private void printWeight(Game game) {
-//        Integer season = this.convertSeasonStrToSeasonNum(game.getSeason());
-//        if (season == null) {
-//            return;
-//        }
-//
-//        this.addMessage("==========================");
-//        this.addMessage("========== weights ==========");
-//        this.addMessage("==========================");
-//        String line = "Flask {\n\t";
-//        line += this.flaskWeight[season][0] + ", ";
-//        line += this.flaskWeight[season][1] + ", ";
-//        line += this.flaskWeight[season][2] + "\n},\n";
-//
-//        line += "Gear {\n\t";
-//        line += this.gearWeight[season][0] + ",";
-//        line += this.gearWeight[season][1] + ",";
-//        line += this.gearWeight[season][2] + "\n},\n";
-//
-//        line += "Money {\n";
-//        for (int i = 0; i < 11; i++) {
-//            line += "\t" + i + " {\n";
-//            line += "\t\t";
-//            line += this.moneyWeight[season][i][0] + ",";
-//            line += this.moneyWeight[season][i][1] + ",";
-//            line += this.moneyWeight[season][i][2] + "\n\t},\n";
-//        }
-//        line += "},\n";
-//
-//        line += "Trend {\n\t";
-//        line += this.trendWeight[season][0] + ",";
-//        line += this.trendWeight[season][1] + ",";
-//        line += this.trendWeight[season][2] + "\n},\n";
-//
-//        line += "Score {\n\t";
-//        line += this.scoreWeight[season][0] + ",";
-//        line += this.scoreWeight[season][1] + ",";
-//        line += this.scoreWeight[season][2] + "\n},\n";
-//
-//        line += "Machine {\n\t";
-//        line += this.machineWeight[season][0] + ",";
-//        line += this.machineWeight[season][1] + ",";
-//        line += this.machineWeight[season][2] + ",";
-//        line += this.machineWeight[season][3] + ",";
-//        line += this.machineWeight[season][4] + ",";
-//        line += this.machineWeight[season][5] + ",";
-//        line += this.machineWeight[season][6] + ",";
-//        line += this.machineWeight[season][7] + ",";
-//        line += this.machineWeight[season][8] + ",";
-//        line += this.machineWeight[season][9] + ",";
-//        line += this.machineWeight[season][10] + ",";
-//        line += this.machineWeight[season][11] + ",";
-//        line += this.machineWeight[season][12] + ",";
-//        line += this.machineWeight[season][13] + ",";
-//        line += this.machineWeight[season][14] + ",";
-//        line += this.machineWeight[season][15] + ",";
-//        line += this.machineWeight[season][16] + ",";
-//        line += this.machineWeight[season][17] + ",";
-//        line += this.machineWeight[season][18] + ",";
-//        line += this.machineWeight[season][19] + ",";
-//        line += this.machineWeight[season][20] + ",";
-//        line += this.machineWeight[season][21] + "\n},\n";
-//
-//        line += "StartPlayer {\n\t";
-//        line += this.startPlayerWeight[season][0] + ",";
-//        line += this.startPlayerWeight[season][1] + ",";
-//        line += this.startPlayerWeight[season][2] + "\n},\n";
-//
-//        addMessage(line);
-    }
-
-    @Override
-    protected void enemyPlay(String text) {
-        super.enemyPlay(text);
-        this.handCount += 1;
-    }
 
     /**
      * 仮想で打つ（季節の更新をするかどうか変更可）
@@ -307,6 +248,12 @@ public class Tochka extends TajimaLabAI {
         return cloneGame;
     }
 
+    
+    /**
+     * ニューラルネットワークで考える
+     * @param input
+     * @return 
+     */
     private Action neuralNet(NeuralInput input) {
 
         // 1層目 畳み込む
@@ -323,7 +270,7 @@ public class Tochka extends TajimaLabAI {
             }
         }
 
-        addMessage("[1st]: " + middle1Out);
+//        addMessage("[1st]: " + middle1Out);
 
         // 2層目 畳み込む
         for (int j = 0; j < 10; j++) {
@@ -338,7 +285,7 @@ public class Tochka extends TajimaLabAI {
             }
         }
 
-        addMessage("[1st]: " + middle2Out);
+//        addMessage("[1st]: " + middle2Out);
 
         // 出口 畳み込む
         output = new double[32];
@@ -356,15 +303,15 @@ public class Tochka extends TajimaLabAI {
         for (int i = 0; i < 32; i++) {
             map.put(ACTIONS[i], output[i]);
         }
-        List<Map.Entry<Action, Double>> listEntrys = new ArrayList<Entry<Action, Double>>(map.entrySet());
-        Collections.sort(listEntrys, (Entry<Action, Double> o1, Entry<Action, Double> o2) -> o2.getValue().compareTo(o1.getValue()));
-        addMessage("====output====");
-        for (Entry<Action, Double> entry : listEntrys) {
-            addMessage(entry.getKey() + ":" + entry.getValue());
-        }
+        List<Map.Entry<Action, Double>> listEntrys = new ArrayList<Map.Entry<Action, Double>>(map.entrySet());
+        Collections.sort(listEntrys, (Map.Entry<Action, Double> o1, Map.Entry<Action, Double> o2) -> o2.getValue().compareTo(o1.getValue()));
+//        addMessage("====output====");
+//        for (Map.Entry<Action, Double> entry : listEntrys) {
+//            addMessage(entry.getKey() + ":" + entry.getValue());
+//        }
 
         // 上から順に打てるものを確認する
-        for (Entry<Action, Double> entry : listEntrys) {
+        for (Map.Entry<Action, Double> entry : listEntrys) {
             Action a = entry.getKey();
             String w = a.worker;
             String p = a.place;
@@ -382,38 +329,40 @@ public class Tochka extends TajimaLabAI {
         }
     }
 
+    
     /**
      * 考えるフェーズ 手を打つところまで実装
      */
     @Override
-    protected void think() {
+    public void think() {
 
-        this.addMessage("==========================");
-        this.addMessage("========== thinking ==========");
-        this.addMessage("==========================");
-
+//        System.out.println("==========================");
+//        System.out.println("========== thinking ==========");
+//        System.out.println("==========================");
         this.handCount += 1;
 
         Action bestAction = null;
 
         NeuralInput input = new NeuralInput(gameBoard, myNumber, handCount);
 
-        addMessage("inputLength: " + input.getLength());
-        addMessage("rowInput: " + input.getRowVal());
-
         middle1Out = "";
         middle2Out = "";
 
         bestAction = neuralNet(input);
 
-        this.addMessage("===========================");
-        this.addMessage("========== think end ==========");
-        this.addMessage("===========================");
-
-        this.addMessage("* Best Action is " + bestAction);
-
+        // デバッグ用
+//        System.out.println("player" + this.myNumber + " -> " + bestAction);
         // 最適解を打つ
-        this.putWorker(bestAction);
+        this.gameBoard.play(this.myNumber, bestAction.place, bestAction.worker, bestAction.option);
+
+//        System.out.println("===========================");
+//        System.out.println("========== think end ==========");
+//        System.out.println("===========================");
+//
+//        System.out.println(this.myNumber + " : " + bestAction + " -> " + bestEva);
+        // 最適解を打つ
+//        this.putWorker(bestAction);
+//        return bestAction;
     }
 
     /**

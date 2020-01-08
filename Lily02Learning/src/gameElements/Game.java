@@ -32,7 +32,7 @@ public class Game extends Observable implements Cloneable {
     private GameResources[] gameResource;
     private int currentSeason;
    
-    private int getSeasonClass(){
+    public int getSeasonClass(){
         if(this.currentSeason == 0 ||this.currentSeason == 1 ||this.currentSeason == 6 ||this.currentSeason == 7){
             return 0;
         } else if(this.currentSeason == 2 ||this.currentSeason == 3 ||this.currentSeason == 8 ||this.currentSeason == 9){

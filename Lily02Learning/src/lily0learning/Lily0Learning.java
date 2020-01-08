@@ -7,7 +7,7 @@
 package lily0learning;
 
 import ai.Action;
-import ai.Lily0;
+import ai.Tochka;
 import gameElements.Game;
 import geneticAlgorithm.GeneticIndividual;
 import java.io.File;
@@ -78,7 +78,7 @@ public class Lily0Learning {
         int count = 0;
 
         // 兵庫県警に逮捕される。。。
-        while (count < 1000000) {
+        while (count < 100) {
             count++;
             /* 対戦する */
 //            System.out.println("======第" + count + "世代 対戦フェーズ======");
@@ -96,9 +96,9 @@ public class Lily0Learning {
                         // ゲーム初期化
                         Game game = new Game();
                         // Lily生成
-                        Lily0[] ai = new Lily0[2];
-                        ai[0] = new Lily0(game, gis.get(j), 0);
-                        ai[1] = new Lily0(game, gis.get(i), 1);
+                        Tochka[] ai = new Tochka[2];
+                        ai[0] = new Tochka(game, gis.get(j), 0);
+                        ai[1] = new Tochka(game, gis.get(i), 1);
                         game.startGame();
 //                        System.out.println(j + " vs " + i);
                         // 対戦

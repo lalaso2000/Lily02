@@ -27,9 +27,9 @@ public class GeneticIndividual implements Comparable<GeneticIndividual> {
 
     public static final double GAUSSIAN_SIGMA = 0.01;
     // 各層の重み
-    private double[][] middle1Weight;
-    private double[][] middle2Weight;
-    private double[][] outWeight;
+    private double[][] middle1Weight = new double[INPUT_LENGTH][MIDDLE_1_LENGTH];;
+    private double[][] middle2Weight = new double[MIDDLE_1_LENGTH][MIDDLE_2_LENGTH];
+    private double[][] outWeight = new double[MIDDLE_2_LENGTH][OUTPUT_LENGTH];
     // 各層の長さ
     public static final int INPUT_LENGTH = 60;
     public static final int MIDDLE_1_LENGTH = 16;
@@ -100,6 +100,16 @@ public class GeneticIndividual implements Comparable<GeneticIndividual> {
             return;
         }
         this.genes = genes;
+        // 各種重みに振り分ける
+        for (int i = 0; i < INPUT_LENGTH * MIDDLE_1_LENGTH; i++) {
+            this.middle1Weight[i / MIDDLE_1_LENGTH][i % MIDDLE_1_LENGTH] = genes[i];
+        }
+        for (int i = 0; i < MIDDLE_1_LENGTH * MIDDLE_2_LENGTH; i++) {
+            this.middle2Weight[i / MIDDLE_2_LENGTH][i % MIDDLE_2_LENGTH] = genes[i + INPUT_LENGTH * MIDDLE_1_LENGTH];
+        }
+        for (int i = 0; i < MIDDLE_2_LENGTH * OUTPUT_LENGTH; i++) {
+            this.outWeight[i / OUTPUT_LENGTH][i % OUTPUT_LENGTH] = genes[i + INPUT_LENGTH * MIDDLE_1_LENGTH + MIDDLE_1_LENGTH * MIDDLE_2_LENGTH];
+        }
     }
 
     /**
@@ -124,10 +134,6 @@ public class GeneticIndividual implements Comparable<GeneticIndividual> {
      * 係数をファイルから読み込む ファイル形式は、1行に各季節、フラスコ→ギア→…→スタプレの順
      */
     private void loadWeights(String filePath) {
-        // 係数を初期化
-        this.middle1Weight = new double[INPUT_LENGTH][MIDDLE_1_LENGTH];
-        this.middle2Weight = new double[MIDDLE_1_LENGTH][MIDDLE_2_LENGTH];
-        this.outWeight = new double[MIDDLE_2_LENGTH][OUTPUT_LENGTH];
         ArrayList<String> lines = new ArrayList<>();
 
         // ファイルを読み込む
@@ -230,29 +236,29 @@ public class GeneticIndividual implements Comparable<GeneticIndividual> {
 //        System.out.println("top: " + top + "  length: " + length);
         // 子供を作る
         double[] newGenes1 = new double[CHROMOSOME_LENGTH];
-        for (int i = 0; i < newGenes1.length; i++) {
-            double k = r.nextDouble() * 0.2 - 0.1;
-            newGenes1[i] += k;
-            if (newGenes1[i] > 1.0) {
-                newGenes1[i] = 1.0;
-            } else if (newGenes1[i] < -1.0) {
-                newGenes1[i] = -1.0;
-            }
-        }
+//        for (int i = 0; i < newGenes1.length; i++) {
+//            double k = r.nextDouble() * 0.2 - 0.1;
+//            newGenes1[i] += k;
+//            if (newGenes1[i] > 1.0) {
+//                newGenes1[i] = 1.0;
+//            } else if (newGenes1[i] < -1.0) {
+//                newGenes1[i] = -1.0;
+//            }
+//        }
         System.arraycopy(g1.genes, 0, newGenes1, 0, g1.genes.length);
         System.arraycopy(g2.genes, top, newGenes1, top, length);
         GeneticIndividual newG1 = new GeneticIndividual(newGenes1);
 
         double[] newGenes2 = new double[CHROMOSOME_LENGTH];
-        for (int i = 0; i < newGenes2.length; i++) {
-            double k = r.nextGaussian() * GAUSSIAN_SIGMA;
-            newGenes2[i] += k;
-            if (newGenes2[i] > 1.0) {
-                newGenes2[i] = 1.0;
-            } else if (newGenes2[i] < -1.0) {
-                newGenes2[i] = -1.0;
-            }
-        }
+//        for (int i = 0; i < newGenes2.length; i++) {
+//            double k = r.nextGaussian() * GAUSSIAN_SIGMA;
+//            newGenes2[i] += k;
+//            if (newGenes2[i] > 1.0) {
+//                newGenes2[i] = 1.0;
+//            } else if (newGenes2[i] < -1.0) {
+//                newGenes2[i] = -1.0;
+//            }
+//        }
         System.arraycopy(g2.genes, 0, newGenes2, 0, g2.genes.length);
         System.arraycopy(g1.genes, top, newGenes2, top, length);
         GeneticIndividual newG2 = new GeneticIndividual(newGenes2);
@@ -294,6 +300,18 @@ public class GeneticIndividual implements Comparable<GeneticIndividual> {
         return win;
     }
 
+    public double[][] getMiddle1Weight() {
+        return middle1Weight;
+    }
+
+    public double[][] getMiddle2Weight() {
+        return middle2Weight;
+    }
+
+    public double[][] getOutWeight() {
+        return outWeight;
+    }
+
     public double[] getGenes() {
         return genes;
     }
@@ -321,7 +339,7 @@ public class GeneticIndividual implements Comparable<GeneticIndividual> {
         for (int i = 0; i < INPUT_LENGTH; i++) {
             for (int j = 0; j < MIDDLE_1_LENGTH; j++) {
                 line += this.middle1Weight[i][j];
-                if(j != MIDDLE_1_LENGTH-1) {
+                if (j != MIDDLE_1_LENGTH - 1) {
                     line += ",";
                 }
             }
@@ -331,7 +349,7 @@ public class GeneticIndividual implements Comparable<GeneticIndividual> {
         for (int i = 0; i < MIDDLE_1_LENGTH; i++) {
             for (int j = 0; j < MIDDLE_2_LENGTH; j++) {
                 line += this.middle2Weight[i][j];
-                if(j != MIDDLE_2_LENGTH-1) {
+                if (j != MIDDLE_2_LENGTH - 1) {
                     line += ",";
                 }
             }
@@ -341,7 +359,7 @@ public class GeneticIndividual implements Comparable<GeneticIndividual> {
         for (int i = 0; i < MIDDLE_2_LENGTH; i++) {
             for (int j = 0; j < OUTPUT_LENGTH; j++) {
                 line += this.outWeight[i][j];
-                if(j != OUTPUT_LENGTH-1) {
+                if (j != OUTPUT_LENGTH - 1) {
                     line += ",";
                 }
             }
