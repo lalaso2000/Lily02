@@ -42,7 +42,7 @@ public class Tochka extends TajimaLabAI {
     private String middle2Out;
     private double[] output;
 
-    public static Action[] actions = {
+    public static Action[] ACTIONS = {
         new Action("S", "1-1", "F"),
         new Action("S", "1-1", "G"),
         new Action("S", "1-1", "M"),
@@ -127,69 +127,82 @@ public class Tochka extends TajimaLabAI {
     }
 
     /**
-     * 係数をファイルから読み込む ファイル形式は、1行に各季節、フラスコ→ギア→…→スタプレの順
+     * 係数をファイルから読み込む ファイル形式は、1-60行目が1層目、61-76行目が2層目、77-86行目が出口層の係数
      */
     private void loadWeights(String filePath) {
-//        ArrayList<String> lines = new ArrayList<>();
-//
-//        // ファイルを読み込む
-//        File file = new File(filePath);
-//        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
-//            String line = null;
-//            while ((line = br.readLine()) != null) {
-//                // 空行はスキップ
-//                if (line.isEmpty()) {
-//                    continue;
-//                }
-//                // "#"から始まる行はコメント
-//                if (line.startsWith("#")) {
-//                    continue;
-//                }
-//                // 空行でない場合、保存
-//                lines.add(line);
-//            }
-//        } catch (FileNotFoundException e) {
-//            System.err.println("ファイルが存在しません。");
-//        } catch (IOException e) {
-//            System.err.println("エラーが発生しました。");
-//        }
-//
-//        // 行数が異なる
-//        if (lines.size() != 12) {
-//            System.err.println("csvの行数が不正です。");
-//        }
-//
-//        // 数値を読み込む
-//        int seasonCount = 0;
-//        for (String line : lines) {
-//            String[] nums = line.split(",");
-//            int count = 0;
-//            for (String num : nums) {
-//                try {
-//                    double n = Double.parseDouble(num);
-//                    // これはひどい
-//                    if (count >= 0 && count < 3) {
-//                        this.flaskWeight[seasonCount][count] = n;
-//                    } else if (count >= 3 && count < 6) {
-//                        this.gearWeight[seasonCount][count - 3] = n;
-//                    } else if (count >= 6 && count < 39) {
-//                        this.moneyWeight[seasonCount][(count - 6) / 3][(count - 6) % 3] = n;
-//                    } else if (count >= 39 && count < 42) {
-//                        this.trendWeight[seasonCount][count - 39] = n;
-//                    } else if (count >= 42 && count < 45) {
-//                        this.scoreWeight[seasonCount][count - 42] = n;
-//                    } else if (count >= 45 && count < 67) {
-//                        this.machineWeight[seasonCount][count - 45] = n;
-//                    } else if (count >= 67 && count < 70) {
-//                        this.startPlayerWeight[seasonCount][count - 67] = n;
-//                    }
-//                } catch (NumberFormatException ex) {
-//                    System.err.println("数値じゃないものが含まれています。");
-//                }
-//                count++;
-//            }
-//            seasonCount++;
-//        }
+        // 係数を初期化
+        this.middle1Weight = new double[60][16];
+        this.middle2Weight = new double[16][10];
+        this.outWeight = new double[10][32];
+        ArrayList<String> lines = new ArrayList<>();
+
+        // ファイルを読み込む
+        File file = new File(filePath);
+        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+            String line = null;
+            while ((line = br.readLine()) != null) {
+                // 空行はスキップ
+                if (line.isEmpty()) {
+                    continue;
+                }
+                // "#"から始まる行はコメント
+                if (line.startsWith("#")) {
+                    continue;
+                }
+                // 空行でない場合、保存
+                lines.add(line);
+            }
+        } catch (FileNotFoundException e) {
+            System.err.println("ファイルが存在しません。");
+        } catch (IOException e) {
+            System.err.println("エラーが発生しました。");
+        }
+
+        // 行数が異なる
+        if (lines.size() != 86) {
+            System.err.println("csvの行数が不正です。");
+        }
+
+        // 数値を読み込む
+        int lineCount = 0;
+        for (String line : lines) {
+            String[] nums = line.split(",");
+            int numCount = 0;
+            // 各行の数字の数を確認
+            if (0 <= lineCount && lineCount < 60) {
+                if (nums.length != 16) {
+                    System.err.println((lineCount + 1) + "行目の列数が異なります");
+                }
+            }
+            if (60 <= lineCount && lineCount < 76) {
+                if (nums.length != 10) {
+                    System.err.println((lineCount + 1) + "行目の列数が異なります");
+                }
+            }
+            if (76 <= lineCount && lineCount < 86) {
+                if (nums.length != 32) {
+                    System.err.println((lineCount + 1) + "行目の列数が異なります");
+                }
+            }
+            for (String num : nums) {
+                try {
+                    double n = Double.parseDouble(num);
+                    if (0 <= lineCount && lineCount < 60) {
+                        this.middle1Weight[lineCount][numCount] = n;
+                    }
+                    if (60 <= lineCount && lineCount < 76) {
+                        this.middle2Weight[lineCount-60][numCount] = n;
+                    }
+                    if (76 <= lineCount && lineCount < 86) {
+                        this.outWeight[lineCount-76][numCount] = n;
+                    }
+                } catch (NumberFormatException ex) {
+                    System.err.println("数値じゃないものが含まれています。");
+                }
+                numCount++;
+            }
+            lineCount++;
+        }
     }
 
     private void printWeight(Game game) {
@@ -341,7 +354,7 @@ public class Tochka extends TajimaLabAI {
         // 順位づけする
         Map<Action, Double> map = new HashMap<>();
         for (int i = 0; i < 32; i++) {
-            map.put(actions[i], output[i]);
+            map.put(ACTIONS[i], output[i]);
         }
         List<Map.Entry<Action, Double>> listEntrys = new ArrayList<Entry<Action, Double>>(map.entrySet());
         Collections.sort(listEntrys, (Entry<Action, Double> o1, Entry<Action, Double> o2) -> o2.getValue().compareTo(o1.getValue()));

@@ -44,7 +44,7 @@ public class ClientGUI extends javax.swing.JFrame implements MessageRecevable {
 
     // 選択された重みファイル
     private File weightFile = null;
-    private final String DEFAULT_FORDER_PATH = "/Users/niwatakumi/OneDrive/Documents/Lily0/Lily0Learning/outputs_v6";
+    private final String DEFAULT_FORDER_PATH = "";
 
     /**
      * コンストラクタ　文字の表示部分のみを初期化する
@@ -361,19 +361,19 @@ public class ClientGUI extends javax.swing.JFrame implements MessageRecevable {
 
         // チェックボックスを確認してAI起動
         if (this.jCheckBox2.isSelected()) {
-//            // 係数ファイルが選択されていない＝やり直し
-//            if(this.weightFile == null){
-//                JOptionPane.showMessageDialog(this, "係数ファイルが指定されていません！", "error!", JOptionPane.ERROR_MESSAGE);
-//                return;
-//            }
+            // 係数ファイルが選択されていない＝やり直し
+            if(this.weightFile == null){
+                JOptionPane.showMessageDialog(this, "係数ファイルが指定されていません！", "error!", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
             Game game = new Game();
-//            try {
-//                this.myAI = new Tochka(game, this.weightFile.getCanonicalPath());
-//            } catch (IOException ex) {
-//                Logger.getLogger(ClientGUI.class.getName()).log(Level.SEVERE, null, ex);
-//                return;
-//            }
-            this.myAI = new Tochka(game);
+            try {
+                this.myAI = new Tochka(game, this.weightFile.getCanonicalPath());
+            } catch (IOException ex) {
+                Logger.getLogger(ClientGUI.class.getName()).log(Level.SEVERE, null, ex);
+                return;
+            }
+//            this.myAI = new Tochka(game);
             this.myAI.setConnecter(this.connecter);
             this.myAI.setOutputInterface(this);
             this.jTextField1.setEnabled(false);
