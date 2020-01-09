@@ -24,25 +24,21 @@ import java.util.Random;
  */
 public class Lily0Learning {
 
-    private static final int INDIVIDUAL_NUM = 10;
     private static final int ELITE_NUM = 3;
-    private static final int NON_ELITE_NUM = 1;
+    private static final int NON_ELITE_NUM = 6;
     private static final int ELITE_CHILDEN_NUM = 6;
     private static final int GROUP_NUM = 1;
+    private static final int RANDOM_NUM = 35;
+    private static final int INDIVIDUAL_NUM = ELITE_NUM + NON_ELITE_NUM + ELITE_CHILDEN_NUM + RANDOM_NUM;
     private static final double INDIVIDUAL_MUTATION_RATE = 0.05;
     private static final double GENOM_MUTATION_RATE = 0.025;
-    private static final String DIR_NAME = "output";
+    private static final String DIR_NAME = "output2_test";
 
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
         // TODO code application logic here
-
-        if (INDIVIDUAL_NUM != ELITE_NUM + ELITE_CHILDEN_NUM + NON_ELITE_NUM) {
-            System.err.println("個体数エラー");
-            return;
-        }
 
         // 個体
         ArrayList<GeneticIndividual> gis = new ArrayList<>(INDIVIDUAL_NUM);
@@ -51,34 +47,32 @@ public class Lily0Learning {
         // フォルダ
         File newdir;
 
-//        // 初期化
-//        // フォルダを作る
-//        newdir = new File(DIR_NAME);
-//        newdir.mkdir();
-//        newdir = new File(DIR_NAME + File.separator + "0");
-//        newdir.mkdir();
-//        for (int i = 0; i < INDIVIDUAL_NUM; i++) {
-//            gis.add(new GeneticIndividual());
-//            gis.get(i).outputCSV(DIR_NAME + File.separator + "0" + File.separator + "weight0-" + i + ".csv");
-//        }
-//        int count = 0;
+        // 初期化
+        // フォルダを作る
+        newdir = new File(DIR_NAME);
+        newdir.mkdir();
+        newdir = new File(DIR_NAME + File.separator + "0");
+        newdir.mkdir();
+        for (int i = 0; i < INDIVIDUAL_NUM; i++) {
+            gis.add(new GeneticIndividual());
+            gis.get(i).outputCSV(DIR_NAME + File.separator + "0" + File.separator + "weight0-" + i + ".csv");
+        }
+        int count = 0;
 
         // 途中から
-        int generation = 100;
-        for (int i = 0; i < INDIVIDUAL_NUM; i++) {
-            String filePath = DIR_NAME;
-            filePath += File.separator;
-            filePath += generation;
-            filePath += File.separator;
-            filePath += "weight" + generation + "-";
-            filePath += i;
-            filePath += ".csv";
-            gis.add(new GeneticIndividual(filePath));
-//            System.out.println(gis.get(i));
-        }
-        int count = generation;
-
-
+//        int generation = 100;
+//        for (int i = 0; i < INDIVIDUAL_NUM; i++) {
+//            String filePath = DIR_NAME;
+//            filePath += File.separator;
+//            filePath += generation;
+//            filePath += File.separator;
+//            filePath += "weight" + generation + "-";
+//            filePath += i;
+//            filePath += ".csv";
+//            gis.add(new GeneticIndividual(filePath));
+////            System.out.println(gis.get(i));
+//        }
+//        int count = generation;
         // 兵庫県警に逮捕される。。。
         while (count < 1000000) {
             count++;
@@ -139,10 +133,10 @@ public class Lily0Learning {
 //                System.out.println(gi.getWin() + " : " + gi.getTotalScore());
 //                System.out.println(gi.getGenes()[0] + "," + gi.getGenes()[1] + "," + gi.getGenes()[2]);
 //            }
-            // 上位4つはエリート
+            // 上位はエリート
             List<GeneticIndividual> elite = gis.subList(0, ELITE_NUM);
 
-            // エリート以外をランダムに4つ引き継ぎ
+            // エリート以外をランダムに引き継ぎ
             List<GeneticIndividual> nonElite = gis.subList(ELITE_NUM, INDIVIDUAL_NUM);
             Collections.shuffle(nonElite);
             nonElite = nonElite.subList(0, NON_ELITE_NUM);
@@ -153,7 +147,7 @@ public class Lily0Learning {
                 }
             }
 
-            // エリートから12体の子供を生成
+            // エリートから子供を生成
             ArrayList<GeneticIndividual> eliteChilden = new ArrayList<>();
             for (int i = 0; i < ELITE_CHILDEN_NUM; i += 2) {
                 Collections.shuffle(elite);
@@ -168,11 +162,17 @@ public class Lily0Learning {
                 eliteChilden.add(childen[1]);
             }
 
+            ArrayList<GeneticIndividual> randomChildren = new ArrayList<>();
+            for (int i = 0; i < RANDOM_NUM; i++) {
+                randomChildren.add(new GeneticIndividual());
+            }
+
             // 次の世代に引き継ぎ
             gis = new ArrayList<>();
             gis.addAll(elite);
             gis.addAll(nonElite);
             gis.addAll(eliteChilden);
+            gis.addAll(randomChildren);
 //            for (GeneticIndividual gi : gis) {
 //                gi.setTotalScore(0);
 //                gi.setWin(0);
@@ -191,6 +191,10 @@ public class Lily0Learning {
                 filePath += count;
                 filePath += "-";
                 filePath += i;
+                if (i < INDIVIDUAL_NUM - RANDOM_NUM && gis.get(i).getNewcomer()) {
+                    filePath += "(r)";
+                    gis.get(i).setNewComer(false);
+                }
                 filePath += ".csv";
                 gis.get(i).outputCSV(filePath);
             }

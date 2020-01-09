@@ -40,6 +40,7 @@ public class GeneticIndividual implements Comparable<GeneticIndividual> {
     private double[] genes = new double[CHROMOSOME_LENGTH];
     private int win = 0;
     private int totalScore = 0;
+    private boolean newcomer;
 
     /**
      * middle1Weight / middle2Weight / outputWeightを一列にする
@@ -86,6 +87,7 @@ public class GeneticIndividual implements Comparable<GeneticIndividual> {
                 this.outWeight[i][j] = 2 * rand.nextDouble() - 1.0;
             }
         }
+        this.newcomer = true;
         // 係数を一列にする
         this.serialize();
     }
@@ -110,6 +112,7 @@ public class GeneticIndividual implements Comparable<GeneticIndividual> {
         for (int i = 0; i < MIDDLE_2_LENGTH * OUTPUT_LENGTH; i++) {
             this.outWeight[i / OUTPUT_LENGTH][i % OUTPUT_LENGTH] = genes[i + INPUT_LENGTH * MIDDLE_1_LENGTH + MIDDLE_1_LENGTH * MIDDLE_2_LENGTH];
         }
+        this.newcomer = false;
     }
 
     /**
@@ -119,6 +122,7 @@ public class GeneticIndividual implements Comparable<GeneticIndividual> {
      */
     public GeneticIndividual(String filePath) {
         this.loadWeights(filePath);
+        this.newcomer = false;
     }
 
     /**
@@ -213,6 +217,7 @@ public class GeneticIndividual implements Comparable<GeneticIndividual> {
         // ファイルに書き込む
         try (PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(file)))) {
             pw.println(this);
+            pw.println("# 1-1F,1-1G,1-1M,2-1F,2-1G,2-2,3-1,3-2,3-3,3-4F,3-4G,4-1,4-2,4-3,4-4,4-5,5-1,5-2,5-3,5-4,5-5,6-1,6-2FF,6-2FG,6-2GG,6-3,7-1 T0,7-1 T1,7-1 T2,7-1 T3,7-1 T4,7-1 T5");
             pw.close();
         } catch (IOException ex) {
             System.err.println("ファイル書き込みエラー");
@@ -330,6 +335,14 @@ public class GeneticIndividual implements Comparable<GeneticIndividual> {
 
     public void addWin() {
         this.win += 1;
+    }
+    
+    public boolean getNewcomer() {
+        return this.newcomer;
+    }
+    
+    public void setNewComer(boolean b) {
+        this.newcomer = b;
     }
 
     @Override
