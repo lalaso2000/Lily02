@@ -142,6 +142,11 @@ public class GeneticIndividual implements Comparable<GeneticIndividual> {
 
         // ファイルを読み込む
         File file = new File(filePath);
+        if (!file.exists()){
+            String basename = filePath.substring(0,filePath.lastIndexOf('.'));
+            String rFilePath = basename + "(r).csv";
+            file = new File(rFilePath);
+        }
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
             String line = null;
             while ((line = br.readLine()) != null) {
@@ -157,7 +162,7 @@ public class GeneticIndividual implements Comparable<GeneticIndividual> {
                 lines.add(line);
             }
         } catch (FileNotFoundException e) {
-            System.err.println("ファイルが存在しません。");
+            System.err.println("ファイル" + file.getAbsolutePath() + "が存在しません。");
         } catch (IOException e) {
             System.err.println("エラーが発生しました。");
         }

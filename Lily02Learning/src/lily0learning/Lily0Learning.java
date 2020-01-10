@@ -32,7 +32,8 @@ public class Lily0Learning {
     private static final int INDIVIDUAL_NUM = ELITE_NUM + NON_ELITE_NUM + ELITE_CHILDEN_NUM + RANDOM_NUM;
     private static final double INDIVIDUAL_MUTATION_RATE = 0.05;
     private static final double GENOM_MUTATION_RATE = 0.025;
-    private static final String DIR_NAME = "output2_test";
+    private static final String DIR_NAME = "D:\\output2";
+    private static final String ONLINE_DIR_NAME = "C:\\Users\\raras\\OneDrive - 独立行政法人 国立高等専門学校機構\\Tochka\\Lily02\\Lily02Learning\\output2";
 
     /**
      * @param args the command line arguments
@@ -47,32 +48,34 @@ public class Lily0Learning {
         // フォルダ
         File newdir;
 
-        // 初期化
-        // フォルダを作る
-        newdir = new File(DIR_NAME);
-        newdir.mkdir();
-        newdir = new File(DIR_NAME + File.separator + "0");
-        newdir.mkdir();
-        for (int i = 0; i < INDIVIDUAL_NUM; i++) {
-            gis.add(new GeneticIndividual());
-            gis.get(i).outputCSV(DIR_NAME + File.separator + "0" + File.separator + "weight0-" + i + ".csv");
-        }
-        int count = 0;
+//        // 初期化
+//        // フォルダを作る
+//        newdir = new File(DIR_NAME);
+//        newdir.mkdir();
+//        newdir = new File(DIR_NAME + File.separator + "0");
+//        newdir.mkdir();
+//        for (int i = 0; i < INDIVIDUAL_NUM; i++) {
+//            gis.add(new GeneticIndividual());
+//            gis.get(i).outputCSV(DIR_NAME + File.separator + "0" + File.separator + "weight0-" + i + ".csv");
+//        }
+//        int count = 0;
 
         // 途中から
-//        int generation = 100;
-//        for (int i = 0; i < INDIVIDUAL_NUM; i++) {
-//            String filePath = DIR_NAME;
-//            filePath += File.separator;
-//            filePath += generation;
-//            filePath += File.separator;
-//            filePath += "weight" + generation + "-";
-//            filePath += i;
-//            filePath += ".csv";
-//            gis.add(new GeneticIndividual(filePath));
-////            System.out.println(gis.get(i));
-//        }
-//        int count = generation;
+        int generation = 9503;
+        for (int i = 0; i < INDIVIDUAL_NUM; i++) {
+            String filePath = DIR_NAME;
+            filePath += File.separator;
+            filePath += generation;
+            filePath += File.separator;
+            filePath += "weight" + generation + "-";
+            filePath += i;
+            filePath += ".csv";
+            gis.add(new GeneticIndividual(filePath));
+//            System.out.println(gis.get(i));
+        }
+        int count = generation;
+        
+        
         // 兵庫県警に逮捕される。。。
         while (count < 1000000) {
             count++;
@@ -178,25 +181,47 @@ public class Lily0Learning {
 //                gi.setWin(0);
 //            }
 
-            // フォルダを作る
             newdir = new File(DIR_NAME + File.separator + count);
-            newdir.mkdir();
+                newdir.mkdir();
 
-            for (int i = 0; i < INDIVIDUAL_NUM; i++) {
-                String filePath = DIR_NAME;
-                filePath += File.separator;
-                filePath += count;
-                filePath += File.separator;
-                filePath += "weight";
-                filePath += count;
-                filePath += "-";
-                filePath += i;
-                if (i < INDIVIDUAL_NUM - RANDOM_NUM && gis.get(i).getNewcomer()) {
-                    filePath += "(r)";
-                    gis.get(i).setNewComer(false);
+                for (int i = 0; i < INDIVIDUAL_NUM; i++) {
+                    String filePath = DIR_NAME;
+                    filePath += File.separator;
+                    filePath += count;
+                    filePath += File.separator;
+                    filePath += "weight";
+                    filePath += count;
+                    filePath += "-";
+                    filePath += i;
+                    if (i < INDIVIDUAL_NUM - RANDOM_NUM && gis.get(i).getNewcomer()) {
+                        filePath += "(r)";
+                        gis.get(i).setNewComer(false);
+                    }
+                    filePath += ".csv";
+                    gis.get(i).outputCSV(filePath);
                 }
-                filePath += ".csv";
-                gis.get(i).outputCSV(filePath);
+
+            // フォルダを作る
+            if (count % 500 == 0) {
+                newdir = new File(ONLINE_DIR_NAME + File.separator + count);
+                newdir.mkdir();
+
+                for (int i = 0; i < INDIVIDUAL_NUM; i++) {
+                    String filePath = ONLINE_DIR_NAME;
+                    filePath += File.separator;
+                    filePath += count;
+                    filePath += File.separator;
+                    filePath += "weight";
+                    filePath += count;
+                    filePath += "-";
+                    filePath += i;
+                    if (i < INDIVIDUAL_NUM - RANDOM_NUM && gis.get(i).getNewcomer()) {
+                        filePath += "(r)";
+                        gis.get(i).setNewComer(false);
+                    }
+                    filePath += ".csv";
+                    gis.get(i).outputCSV(filePath);
+                }
             }
         }
 
