@@ -5,6 +5,7 @@
  */
 package geneticAlgorithm;
 
+import ai.Tochka;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -31,10 +32,10 @@ public class GeneticIndividual implements Comparable<GeneticIndividual> {
     private double[][] middle2Weight = new double[MIDDLE_1_LENGTH][MIDDLE_2_LENGTH];
     private double[][] outWeight = new double[MIDDLE_2_LENGTH][OUTPUT_LENGTH];
     // 各層の長さ
-    public static final int INPUT_LENGTH = 60;
-    public static final int MIDDLE_1_LENGTH = 32;
-    public static final int MIDDLE_2_LENGTH = 16;
-    public static final int OUTPUT_LENGTH = 32;
+    public static final int INPUT_LENGTH = Tochka.INPUT_LENGTH;
+    public static final int MIDDLE_1_LENGTH = Tochka.MIDDLE_1_LENGTH;
+    public static final int MIDDLE_2_LENGTH = Tochka.MIDDLE_2_LENGTH;
+    public static final int OUTPUT_LENGTH = Tochka.OUTPUT_LENGTH;
     // 重みを一列にしたもの：遺伝子
     public static final int CHROMOSOME_LENGTH = INPUT_LENGTH * MIDDLE_1_LENGTH + MIDDLE_1_LENGTH * MIDDLE_2_LENGTH + MIDDLE_2_LENGTH * OUTPUT_LENGTH;
     private double[] genes = new double[CHROMOSOME_LENGTH];
