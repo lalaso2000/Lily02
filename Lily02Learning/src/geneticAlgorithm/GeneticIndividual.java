@@ -32,8 +32,8 @@ public class GeneticIndividual implements Comparable<GeneticIndividual> {
     private double[][] outWeight = new double[MIDDLE_2_LENGTH][OUTPUT_LENGTH];
     // 各層の長さ
     public static final int INPUT_LENGTH = 60;
-    public static final int MIDDLE_1_LENGTH = 16;
-    public static final int MIDDLE_2_LENGTH = 10;
+    public static final int MIDDLE_1_LENGTH = 32;
+    public static final int MIDDLE_2_LENGTH = 16;
     public static final int OUTPUT_LENGTH = 32;
     // 重みを一列にしたもの：遺伝子
     public static final int CHROMOSOME_LENGTH = INPUT_LENGTH * MIDDLE_1_LENGTH + MIDDLE_1_LENGTH * MIDDLE_2_LENGTH + MIDDLE_2_LENGTH * OUTPUT_LENGTH;

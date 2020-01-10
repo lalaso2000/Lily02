@@ -30,7 +30,7 @@ import network.ServerConnecter;
 public class ClientGUI extends javax.swing.JFrame implements MessageRecevable {
 
     //ウィンドウタイトル
-    private static final String WINDOW_TITLE = "Tochka v0.0";
+    private static final String WINDOW_TITLE = "Tochka v3.0";
 
     //サーバとの通信クラス
     private ServerConnecter connecter;
