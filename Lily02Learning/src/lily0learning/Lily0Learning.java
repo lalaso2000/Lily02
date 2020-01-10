@@ -32,7 +32,7 @@ public class Lily0Learning {
     private static final int INDIVIDUAL_NUM = ELITE_NUM + NON_ELITE_NUM + ELITE_CHILDEN_NUM + RANDOM_NUM;
     private static final double INDIVIDUAL_MUTATION_RATE = 0.05;
     private static final double GENOM_MUTATION_RATE = 0.025;
-    private static final String DIR_NAME = "output2_test";
+    private static final String DIR_NAME = "D:\\output3";
 
     /**
      * @param args the command line arguments

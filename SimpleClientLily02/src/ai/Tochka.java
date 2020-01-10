@@ -41,6 +41,11 @@ public class Tochka extends TajimaLabAI {
     private String middle1Out;
     private String middle2Out;
     private double[] output;
+    
+    public static final int INPUT_LENGTH = 60;
+    public static final int MIDDLE_1_LENGTH = 32;
+    public static final int MIDDLE_2_LENGTH = 16;
+    public static final int OUTPUT_LENGTH = 32;
 
     public static Action[] ACTIONS = {
         new Action("S", "1-1", "F"),
@@ -96,31 +101,31 @@ public class Tochka extends TajimaLabAI {
      */
     public Tochka(Game game, String weightFilePath) {
         super(game);
-        this.myName = "Tochka";
+        this.myName = "Tochka3";
         loadWeights(weightFilePath);
     }
 
     public Tochka(Game game) {
         super(game);
-        this.myName = "Tochka";
+        this.myName = "Tochka3";
 
-        // とりあえずランダムで生成
-        this.middle1Weight = new double[60][16];
+         // とりあえずランダムで生成
+        this.middle1Weight = new double[INPUT_LENGTH][MIDDLE_1_LENGTH];
         Random rand = new Random();
-        for (int i = 0; i < 60; i++) {
-            for (int j = 0; j < 16; j++) {
+        for (int i = 0; i < INPUT_LENGTH; i++) {
+            for (int j = 0; j < MIDDLE_1_LENGTH; j++) {
                 this.middle1Weight[i][j] = 2 * rand.nextDouble() - 1.0;
             }
         }
-        this.middle2Weight = new double[16][10];
-        for (int i = 0; i < 16; i++) {
-            for (int j = 0; j < 10; j++) {
+        this.middle2Weight = new double[MIDDLE_1_LENGTH][MIDDLE_2_LENGTH];
+        for (int i = 0; i < MIDDLE_1_LENGTH; i++) {
+            for (int j = 0; j < MIDDLE_2_LENGTH; j++) {
                 this.middle2Weight[i][j] = 2 * rand.nextDouble() - 1.0;
             }
         }
-        this.outWeight = new double[10][32];
-        for (int i = 0; i < 10; i++) {
-            for (int j = 0; j < 32; j++) {
+        this.outWeight = new double[MIDDLE_2_LENGTH][OUTPUT_LENGTH];
+        for (int i = 0; i < MIDDLE_2_LENGTH; i++) {
+            for (int j = 0; j < OUTPUT_LENGTH; j++) {
                 this.outWeight[i][j] = 2 * rand.nextDouble() - 1.0;
             }
         }
@@ -131,9 +136,9 @@ public class Tochka extends TajimaLabAI {
      */
     private void loadWeights(String filePath) {
         // 係数を初期化
-        this.middle1Weight = new double[60][16];
-        this.middle2Weight = new double[16][10];
-        this.outWeight = new double[10][32];
+        this.middle1Weight = new double[INPUT_LENGTH][MIDDLE_1_LENGTH];
+        this.middle2Weight = new double[MIDDLE_1_LENGTH][MIDDLE_2_LENGTH];
+        this.outWeight = new double[MIDDLE_2_LENGTH][OUTPUT_LENGTH];
         ArrayList<String> lines = new ArrayList<>();
 
         // ファイルを読み込む
@@ -159,7 +164,7 @@ public class Tochka extends TajimaLabAI {
         }
 
         // 行数が異なる
-        if (lines.size() != 86) {
+        if (lines.size() != INPUT_LENGTH+MIDDLE_1_LENGTH+MIDDLE_2_LENGTH) {
             System.err.println("csvの行数が不正です。");
         }
 
@@ -169,32 +174,32 @@ public class Tochka extends TajimaLabAI {
             String[] nums = line.split(",");
             int numCount = 0;
             // 各行の数字の数を確認
-            if (0 <= lineCount && lineCount < 60) {
-                if (nums.length != 16) {
+            if (0 <= lineCount && lineCount < INPUT_LENGTH) {
+                if (nums.length != MIDDLE_1_LENGTH) {
                     System.err.println((lineCount + 1) + "行目の列数が異なります");
                 }
             }
-            if (60 <= lineCount && lineCount < 76) {
-                if (nums.length != 10) {
+            if (INPUT_LENGTH <= lineCount && lineCount < INPUT_LENGTH+MIDDLE_1_LENGTH) {
+                if (nums.length != MIDDLE_2_LENGTH) {
                     System.err.println((lineCount + 1) + "行目の列数が異なります");
                 }
             }
-            if (76 <= lineCount && lineCount < 86) {
-                if (nums.length != 32) {
+            if (INPUT_LENGTH+MIDDLE_1_LENGTH <= lineCount && lineCount < INPUT_LENGTH+MIDDLE_1_LENGTH+MIDDLE_2_LENGTH) {
+                if (nums.length != OUTPUT_LENGTH) {
                     System.err.println((lineCount + 1) + "行目の列数が異なります");
                 }
             }
             for (String num : nums) {
                 try {
                     double n = Double.parseDouble(num);
-                    if (0 <= lineCount && lineCount < 60) {
+                    if (0 <= lineCount && lineCount < INPUT_LENGTH) {
                         this.middle1Weight[lineCount][numCount] = n;
                     }
-                    if (60 <= lineCount && lineCount < 76) {
-                        this.middle2Weight[lineCount-60][numCount] = n;
+                    if (INPUT_LENGTH <= lineCount && lineCount < INPUT_LENGTH+MIDDLE_1_LENGTH) {
+                        this.middle2Weight[lineCount-INPUT_LENGTH][numCount] = n;
                     }
-                    if (76 <= lineCount && lineCount < 86) {
-                        this.outWeight[lineCount-76][numCount] = n;
+                    if (INPUT_LENGTH+MIDDLE_1_LENGTH <= lineCount && lineCount < INPUT_LENGTH+MIDDLE_1_LENGTH+MIDDLE_2_LENGTH) {
+                        this.outWeight[lineCount-(INPUT_LENGTH+MIDDLE_1_LENGTH)][numCount] = n;
                     }
                 } catch (NumberFormatException ex) {
                     System.err.println("数値じゃないものが含まれています。");
@@ -311,9 +316,9 @@ public class Tochka extends TajimaLabAI {
 
         // 1層目 畳み込む
         String in = input.getRowVal();
-        for (int j = 0; j < 16; j++) {
+        for (int j = 0; j < MIDDLE_1_LENGTH; j++) {
             double sum = 0.0;
-            for (int i = 0; i < 60; i++) {
+            for (int i = 0; i < INPUT_LENGTH; i++) {
                 sum += Integer.parseInt(in.substring(i, i + 1)) * middle1Weight[i][j];
             }
             if (sum >= 0) {
@@ -326,9 +331,9 @@ public class Tochka extends TajimaLabAI {
         addMessage("[1st]: " + middle1Out);
 
         // 2層目 畳み込む
-        for (int j = 0; j < 10; j++) {
+        for (int j = 0; j < MIDDLE_2_LENGTH; j++) {
             double sum = 0.0;
-            for (int i = 0; i < 16; i++) {
+            for (int i = 0; i < MIDDLE_1_LENGTH; i++) {
                 sum += Integer.parseInt(middle1Out.substring(i, i + 1)) * middle2Weight[i][j];
             }
             if (sum >= 0) {
@@ -341,11 +346,11 @@ public class Tochka extends TajimaLabAI {
         addMessage("[1st]: " + middle2Out);
 
         // 出口 畳み込む
-        output = new double[32];
+        output = new double[OUTPUT_LENGTH];
         double total = 0;
-        for (int j = 0; j < 32; j++) {
+        for (int j = 0; j < OUTPUT_LENGTH; j++) {
             double sum = 0.0;
-            for (int i = 0; i < 10; i++) {
+            for (int i = 0; i < MIDDLE_2_LENGTH; i++) {
                 sum += Integer.parseInt(middle2Out.substring(i, i + 1)) * outWeight[i][j];
             }
             output[j] = sum;
@@ -353,7 +358,7 @@ public class Tochka extends TajimaLabAI {
 
         // 順位づけする
         Map<Action, Double> map = new HashMap<>();
-        for (int i = 0; i < 32; i++) {
+        for (int i = 0; i < OUTPUT_LENGTH; i++) {
             map.put(ACTIONS[i], output[i]);
         }
         List<Map.Entry<Action, Double>> listEntrys = new ArrayList<Entry<Action, Double>>(map.entrySet());
