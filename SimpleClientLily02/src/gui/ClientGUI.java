@@ -44,7 +44,7 @@ public class ClientGUI extends javax.swing.JFrame implements MessageRecevable {
 
     // 選択された重みファイル
     private File weightFile = null;
-    private final String DEFAULT_FORDER_PATH = "";
+    private final String DEFAULT_FORDER_PATH = "/Users/niwatakumi/OneDrive - 独立行政法人 国立高等専門学校機構/Tochka/Lily02/Lily02Learning/output3";
 
     /**
      * コンストラクタ　文字の表示部分のみを初期化する
