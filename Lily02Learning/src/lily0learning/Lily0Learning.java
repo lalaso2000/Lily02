@@ -48,32 +48,40 @@ public class Lily0Learning {
         // フォルダ
         File newdir;
 
-//        // 初期化
-//        // フォルダを作る
-//        newdir = new File(DIR_NAME);
-//        newdir.mkdir();
-//        newdir = new File(DIR_NAME + File.separator + "0");
-//        newdir.mkdir();
-//        for (int i = 0; i < INDIVIDUAL_NUM; i++) {
-//            gis.add(new GeneticIndividual());
-//            gis.get(i).outputCSV(DIR_NAME + File.separator + "0" + File.separator + "weight0-" + i + ".csv");
-//        }
-//        int count = 0;
-
-        // 途中から
-        int generation = 9503;
+        // 初期化
+        // フォルダを作る
+        newdir = new File(DIR_NAME);
+        newdir.mkdir();
+        newdir = new File(DIR_NAME + File.separator + "0");
+        newdir.mkdir();
         for (int i = 0; i < INDIVIDUAL_NUM; i++) {
-            String filePath = DIR_NAME;
-            filePath += File.separator;
-            filePath += generation;
-            filePath += File.separator;
-            filePath += "weight" + generation + "-";
-            filePath += i;
-            filePath += ".csv";
-            gis.add(new GeneticIndividual(filePath));
-//            System.out.println(gis.get(i));
+            gis.add(new GeneticIndividual());
+            gis.get(i).outputCSV(DIR_NAME + File.separator + "0" + File.separator + "weight0-" + i + ".csv");
         }
-        int count = generation;
+        newdir = new File(ONLINE_DIR_NAME);
+        newdir.mkdir();
+        newdir = new File(ONLINE_DIR_NAME + File.separator + "0");
+        newdir.mkdir();
+        for (int i = 0; i < INDIVIDUAL_NUM; i++) {
+            gis.add(new GeneticIndividual());
+            gis.get(i).outputCSV(ONLINE_DIR_NAME + File.separator + "0" + File.separator + "weight0-" + i + ".csv");
+        }
+        int count = 0;
+
+//        // 途中から
+//        int generation = 9503;
+//        for (int i = 0; i < INDIVIDUAL_NUM; i++) {
+//            String filePath = DIR_NAME;
+//            filePath += File.separator;
+//            filePath += generation;
+//            filePath += File.separator;
+//            filePath += "weight" + generation + "-";
+//            filePath += i;
+//            filePath += ".csv";
+//            gis.add(new GeneticIndividual(filePath));
+////            System.out.println(gis.get(i));
+//        }
+//        int count = generation;
         
         
         // 兵庫県警に逮捕される。。。

@@ -42,8 +42,8 @@ public class Tochka extends TajimaLabAI {
     private double[] output;
     
     public static final int INPUT_LENGTH = 60;
-    public static final int MIDDLE_1_LENGTH = 16;
-    public static final int MIDDLE_2_LENGTH = 10;
+    public static final int MIDDLE_1_LENGTH = 32;
+    public static final int MIDDLE_2_LENGTH = 16;
     public static final int OUTPUT_LENGTH = 32;
 
     public static Action[] ACTIONS = {
