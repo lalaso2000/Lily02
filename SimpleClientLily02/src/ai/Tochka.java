@@ -101,13 +101,13 @@ public class Tochka extends TajimaLabAI {
      */
     public Tochka(Game game, String weightFilePath) {
         super(game);
-        this.myName = "Tochka3";
+        this.myName = "Tochka4";
         loadWeights(weightFilePath);
     }
 
     public Tochka(Game game) {
         super(game);
-        this.myName = "Tochka3";
+        this.myName = "Tochka4";
 
          // とりあえずランダムで生成
         this.middle1Weight = new double[INPUT_LENGTH][MIDDLE_1_LENGTH];
