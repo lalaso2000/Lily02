@@ -41,6 +41,8 @@ public class GeneticIndividual implements Comparable<GeneticIndividual> {
     private double[] genes = new double[CHROMOSOME_LENGTH];
     private int win = 0;
     private int totalScore = 0;
+    private int teacherWin = 0;
+    private int teacherScore = 0;
     private boolean newcomer;
 
     /**
@@ -338,6 +340,22 @@ public class GeneticIndividual implements Comparable<GeneticIndividual> {
         this.win += 1;
     }
     
+    public void setTeacherScore(int teacherScore) {
+        this.teacherScore = teacherScore;
+    }
+
+    public void addTeacherScore(int teacherScore) {
+        this.teacherScore += teacherScore;
+    }
+
+    public void setTeacherWin(int teacherWin) {
+        this.teacherWin = teacherWin;
+    }
+
+    public void addTeacherWin() {
+        this.teacherWin += 1;
+    }
+    
     public boolean getNewcomer() {
         return this.newcomer;
     }
@@ -384,6 +402,20 @@ public class GeneticIndividual implements Comparable<GeneticIndividual> {
 
     @Override
     public int compareTo(GeneticIndividual o) {
+        // 教師に対する勝数が多いほうが勝ち
+        if (this.teacherWin > o.teacherWin) {
+            return 4;
+        } else if (this.teacherWin < o.teacherWin) {
+            return -4;
+        }
+        
+        // 教師に対するスコアが多いほうが勝ち
+        if (this.teacherScore > o.teacherScore) {
+            return 3;
+        } else if (this.teacherScore < o.teacherScore) {
+            return -3;
+        }
+        
         // 勝数が多いほうが勝ち
         if (this.win > o.win) {
             return 2;
