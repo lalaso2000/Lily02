@@ -98,6 +98,8 @@ public class Tochka extends TajimaLabAI {
      * コンストラクタ for learning
      *
      * @param game
+     * @param gi
+     * @param playerNum
      */
     public Tochka(Game game, GeneticIndividual gi, int playerNum) {
         super(game);
