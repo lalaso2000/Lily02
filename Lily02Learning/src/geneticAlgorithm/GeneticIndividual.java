@@ -28,7 +28,8 @@ public class GeneticIndividual implements Comparable<GeneticIndividual> {
 
     public static final double GAUSSIAN_SIGMA = 0.01;
     // 各層の重み
-    private double[][] middle1Weight = new double[INPUT_LENGTH][MIDDLE_1_LENGTH];;
+    private double[][] middle1Weight = new double[INPUT_LENGTH][MIDDLE_1_LENGTH];
+    ;
     private double[][] middle2Weight = new double[MIDDLE_1_LENGTH][MIDDLE_2_LENGTH];
     private double[][] outWeight = new double[MIDDLE_2_LENGTH][OUTPUT_LENGTH];
     // 各層の長さ
@@ -186,7 +187,7 @@ public class GeneticIndividual implements Comparable<GeneticIndividual> {
                     System.err.println((lineCount + 1) + "行目の列数が異なります");
                 }
             }
-            if (76 <= lineCount && lineCount < INPUT_LENGTH + MIDDLE_1_LENGTH + MIDDLE_2_LENGTH) {
+            if (INPUT_LENGTH + MIDDLE_1_LENGTH <= lineCount && lineCount < INPUT_LENGTH + MIDDLE_1_LENGTH + MIDDLE_2_LENGTH) {
                 if (nums.length != OUTPUT_LENGTH) {
                     System.err.println((lineCount + 1) + "行目の列数が異なります");
                 }
@@ -200,7 +201,7 @@ public class GeneticIndividual implements Comparable<GeneticIndividual> {
                     if (INPUT_LENGTH <= lineCount && lineCount < INPUT_LENGTH + MIDDLE_1_LENGTH) {
                         this.middle2Weight[lineCount - INPUT_LENGTH][numCount] = n;
                     }
-                    if (76 <= lineCount && lineCount < INPUT_LENGTH + MIDDLE_1_LENGTH + MIDDLE_2_LENGTH) {
+                    if (INPUT_LENGTH + MIDDLE_1_LENGTH <= lineCount && lineCount < INPUT_LENGTH + MIDDLE_1_LENGTH + MIDDLE_2_LENGTH) {
                         this.outWeight[lineCount - INPUT_LENGTH - MIDDLE_1_LENGTH][numCount] = n;
                     }
                 } catch (NumberFormatException ex) {
@@ -339,7 +340,7 @@ public class GeneticIndividual implements Comparable<GeneticIndividual> {
     public void addWin() {
         this.win += 1;
     }
-    
+
     public void setTeacherScore(int teacherScore) {
         this.teacherScore = teacherScore;
     }
@@ -355,11 +356,11 @@ public class GeneticIndividual implements Comparable<GeneticIndividual> {
     public void addTeacherWin() {
         this.teacherWin += 1;
     }
-    
+
     public boolean getNewcomer() {
         return this.newcomer;
     }
-    
+
     public void setNewComer(boolean b) {
         this.newcomer = b;
     }
@@ -408,14 +409,14 @@ public class GeneticIndividual implements Comparable<GeneticIndividual> {
         } else if (this.teacherWin < o.teacherWin) {
             return -4;
         }
-        
+
         // 教師に対するスコアが多いほうが勝ち
         if (this.teacherScore > o.teacherScore) {
             return 3;
         } else if (this.teacherScore < o.teacherScore) {
             return -3;
         }
-        
+
         // 勝数が多いほうが勝ち
         if (this.win > o.win) {
             return 2;
