@@ -209,3 +209,4 @@ dmypy.json
 
 # weight.csv
 weight*.csv
+graph.csv
