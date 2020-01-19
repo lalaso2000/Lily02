@@ -26,12 +26,12 @@ import java.util.Random;
  */
 public class Lily0Learning {
 
-    private static final int ELITE_NUM = 3;
-    private static final int NON_ELITE_NUM = 6;
+    private static final int ELITE_NUM = 35;
+    private static final int NON_ELITE_NUM = 4;
     private static final int ELITE_CHILDEN_NUM = 6;
-    private static final int GROUP_NUM = 1;
-    private static final int RANDOM_NUM = 35;
+    private static final int RANDOM_NUM = 5;
     private static final int INDIVIDUAL_NUM = ELITE_NUM + NON_ELITE_NUM + ELITE_CHILDEN_NUM + RANDOM_NUM;
+    private static final int BATTLE_NUM = 30;
     private static final double INDIVIDUAL_MUTATION_RATE = 0.05;
     private static final double GENOM_MUTATION_RATE = 0.025;
     private static final String DIR_NAME = "test";
@@ -78,60 +78,17 @@ public class Lily0Learning {
         // 兵庫県警に逮捕される。。。
         while (count < 1000000) {
             count++;
-            /* 対戦する */
-//            System.out.println("======第" + count + "世代 対戦フェーズ======");
-            // 乱数にしてグループ分け
-            Collections.shuffle(gis);
-
-            int groupIndividualNum = INDIVIDUAL_NUM / GROUP_NUM;
-            // グループの数ループ
-            for (int k = 0; k < GROUP_NUM; k++) {
-                for (int j = k * groupIndividualNum; j < (k + 1) * groupIndividualNum; j++) {
-                    for (int i = k * groupIndividualNum; i < (k + 1) * groupIndividualNum; i++) {
-                        if (j == i) {
-                            continue;
-                        }
-                        // ゲーム初期化
-                        Game game = new Game();
-                        // Lily生成
-                        Tochka[] ai = new Tochka[2];
-                        ai[0] = new Tochka(game, gis.get(j), 0);
-                        ai[1] = new Tochka(game, gis.get(i), 1);
-                        game.startGame();
-//                        System.out.println(j + " vs " + i);
-                        // 対戦
-                        while (game.getGameState() != Game.STATE_GAME_END) {
-                            // カレントプレイヤーが考えて打つ
-                            ai[game.getCurrentPlayer()].think();
-                            // もし季節終了なら季節進行
-                            if (game.getGameState() == Game.STATE_SEASON_END) {
-                                game.changeNewSeason();
-                            }
-                        }
-                        // 終了したらスコアを取得して記録
-                        int[] scores = game.getScore();
-                        if (scores[0] > scores[1]) {
-//                            System.out.println("winner : " + i);
-                            gis.get(j).addWin();
-                        } else if (scores[0] < scores[1]) {
-//                            System.out.println("winner : " + j);
-                            gis.get(i).addWin();
-                        } else {
-//                            System.out.println("drow");
-                        }
-                        gis.get(j).addTotalScore(scores[0] - scores[1]);
-                        gis.get(i).addTotalScore(scores[1] - scores[0]);
-                    }
-                    // 教師と対戦
-                    // 教師後手
+            // 育成対象(gis.get(j))をBATTLE_NUM回ランダム生成したものと対戦させる
+            for (int j = 0; j < INDIVIDUAL_NUM; j++) {
+                for (int i = 0; i < BATTLE_NUM; i++) {
                     // ゲーム初期化
                     Game game = new Game();
-                    // Lily生成
-                    TajimaLabAI[] ai = new TajimaLabAI[2];
+                    // AI生成
+                    Tochka[] ai = new Tochka[2];
                     ai[0] = new Tochka(game, gis.get(j), 0);
-                    ai[1] = new SampleAI(game, 1);
-                    game.startGame();
+                    ai[1] = new Tochka(game, 1);
                     // 対戦
+                    game.startGame();
                     while (game.getGameState() != Game.STATE_GAME_END) {
                         // カレントプレイヤーが考えて打つ
                         ai[game.getCurrentPlayer()].think();
@@ -142,21 +99,19 @@ public class Lily0Learning {
                     }
                     // 終了したらスコアを取得して記録
                     int[] scores = game.getScore();
-                    if (scores[0] > scores[1]) {
-//                            System.out.println("winner : " + i);
-                        gis.get(j).addTeacherWin();
-                    }
-                    gis.get(j).addTeacherScore(scores[0] - scores[1]);
-                    
-                    // 教師先手
+                    // 獲得した得点を記録
+                    gis.get(j).addTotalScore(scores[0]);
+//                    gis.get(j).addTotalScore(scores[0] - scores[1]);
+
+                    // 先攻後攻逆転
                     // ゲーム初期化
                     game = new Game();
-                    // Lily生成
-                    ai = new TajimaLabAI[2];
+                    // AI生成
+                    ai = new Tochka[2];
                     ai[1] = new Tochka(game, gis.get(j), 1);
-                    ai[0] = new SampleAI(game, 0);
-                    game.startGame();
+                    ai[0] = new Tochka(game, 0);
                     // 対戦
+                    game.startGame();
                     while (game.getGameState() != Game.STATE_GAME_END) {
                         // カレントプレイヤーが考えて打つ
                         ai[game.getCurrentPlayer()].think();
@@ -167,23 +122,18 @@ public class Lily0Learning {
                     }
                     // 終了したらスコアを取得して記録
                     scores = game.getScore();
-                    if (scores[1] > scores[0]) {
-                        gis.get(j).addTeacherWin();
-                    }
-                    gis.get(j).addTeacherScore(scores[1] - scores[0]);
+                    // 得失点差を記録
+                    // 獲得した得点を記録
+                    gis.get(j).addTotalScore(scores[1]);
+//                    gis.get(j).addTotalScore(scores[1] - scores[0]);
                 }
+                System.out.println("gis[" + j + "] score: " + gis.get(j).getTotalScore() + "  ave : " + gis.get(j).getTotalScore() / 60.0);
             }
-
 
             /* 世代交代 */
             // ソートして
             Collections.sort(gis, Comparator.reverseOrder());
 
-            // デバッグ用に出力
-//            for (GeneticIndividual gi : gis) {
-//                System.out.println(gi.getWin() + " : " + gi.getTotalScore());
-//                System.out.println(gi.getGenes()[0] + "," + gi.getGenes()[1] + "," + gi.getGenes()[2]);
-//            }
             // 上位はエリート
             List<GeneticIndividual> elite = gis.subList(0, ELITE_NUM);
 
@@ -213,6 +163,7 @@ public class Lily0Learning {
                 eliteChilden.add(childen[1]);
             }
 
+            // 新しくランダムなAIを追加
             ArrayList<GeneticIndividual> randomChildren = new ArrayList<>();
             for (int i = 0; i < RANDOM_NUM; i++) {
                 randomChildren.add(new GeneticIndividual());
@@ -224,10 +175,10 @@ public class Lily0Learning {
             gis.addAll(nonElite);
             gis.addAll(eliteChilden);
             gis.addAll(randomChildren);
-//            for (GeneticIndividual gi : gis) {
-//                gi.setTotalScore(0);
-//                gi.setWin(0);
-//            }
+            for (GeneticIndividual gi : gis) {
+                gi.setTotalScore(0);
+                gi.setWin(0);
+            }
 
             // フォルダを作る
             newdir = new File(DIR_NAME + File.separator + count);
