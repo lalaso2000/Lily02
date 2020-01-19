@@ -8,6 +8,7 @@ package lily0learning;
 
 import ai.Action;
 import ai.SampleAI;
+import ai.SampleAI2;
 import ai.TajimaLabAI;
 import ai.Tochka;
 import gameElements.Game;
@@ -155,6 +156,55 @@ public class Lily0Learning {
                     ai = new TajimaLabAI[2];
                     ai[1] = new Tochka(game, gis.get(j), 1);
                     ai[0] = new SampleAI(game, 0);
+                    game.startGame();
+                    // 対戦
+                    while (game.getGameState() != Game.STATE_GAME_END) {
+                        // カレントプレイヤーが考えて打つ
+                        ai[game.getCurrentPlayer()].think();
+                        // もし季節終了なら季節進行
+                        if (game.getGameState() == Game.STATE_SEASON_END) {
+                            game.changeNewSeason();
+                        }
+                    }
+                    // 終了したらスコアを取得して記録
+                    scores = game.getScore();
+                    if (scores[1] > scores[0]) {
+                        gis.get(j).addTeacherWin();
+                    }
+                    gis.get(j).addTeacherScore(scores[1] - scores[0]);
+                    // 教師と対戦
+                    // 教師後手
+                    // ゲーム初期化
+                    game = new Game();
+                    // Lily生成
+                    ai = new TajimaLabAI[2];
+                    ai[0] = new Tochka(game, gis.get(j), 0);
+                    ai[1] = new SampleAI2(game, 1);
+                    game.startGame();
+                    // 対戦
+                    while (game.getGameState() != Game.STATE_GAME_END) {
+                        // カレントプレイヤーが考えて打つ
+                        ai[game.getCurrentPlayer()].think();
+                        // もし季節終了なら季節進行
+                        if (game.getGameState() == Game.STATE_SEASON_END) {
+                            game.changeNewSeason();
+                        }
+                    }
+                    // 終了したらスコアを取得して記録
+                    scores = game.getScore();
+                    if (scores[0] > scores[1]) {
+//                            System.out.println("winner : " + i);
+                        gis.get(j).addTeacherWin();
+                    }
+                    gis.get(j).addTeacherScore(scores[0] - scores[1]);
+                    
+                    // 教師先手
+                    // ゲーム初期化
+                    game = new Game();
+                    // Lily生成
+                    ai = new TajimaLabAI[2];
+                    ai[1] = new Tochka(game, gis.get(j), 1);
+                    ai[0] = new SampleAI2(game, 0);
                     game.startGame();
                     // 対戦
                     while (game.getGameState() != Game.STATE_GAME_END) {
