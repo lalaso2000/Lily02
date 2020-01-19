@@ -20,6 +20,7 @@ import java.io.PrintWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -43,8 +44,8 @@ public class Lily0Learning {
     private static final int BATTLE_NUM = 30;
     private static final double INDIVIDUAL_MUTATION_RATE = 0.05;
     private static final double GENOM_MUTATION_RATE = 0.025;
-    private static final String DIR_NAME = "D:\\output5-1";
-    private static final String ONLINE_DIR_NAME = "C:\\Users\\raras\\OneDrive - 独立行政法人 国立高等専門学校機構\\Tochka\\Lily02\\outputs\\output5-1";
+    private static final String DIR_NAME = "D:\\output5-3";
+    private static final String ONLINE_DIR_NAME = "C:\\Users\\raras\\OneDrive - 独立行政法人 国立高等専門学校機構\\Tochka\\Lily02\\outputs\\output5-3";
 
 
 
@@ -149,7 +150,7 @@ public class Lily0Learning {
                     gis.get(j).addTotalScore(scores[1]);
 //                    gis.get(j).addTotalScore(scores[1] - scores[0]);
                 }
-                System.out.println("gis[" + j + "] score: " + gis.get(j).getTotalScore() + "  ave : " + gis.get(j).getTotalScore() / 60.0);
+//                System.out.println("gis[" + j + "] score: " + gis.get(j).getTotalScore() + "  ave : " + gis.get(j).getTotalScore() / 60.0);
             }
 
             /* 世代交代 */
@@ -262,10 +263,10 @@ public class Lily0Learning {
                 Path sourcePath = Paths.get(DIR_NAME + File.separator + "graph.csv");
                 Path targetPath = Paths.get(ONLINE_DIR_NAME + File.separator + "graph.csv");
                 try {
-                    Files.copy(sourcePath, targetPath);
+                    Files.copy(sourcePath, targetPath, StandardCopyOption.REPLACE_EXISTING);
                 } catch (IOException ex) {
                     // コピーエラー
-                    System.out.println("ファイルのコピーに失敗しました．");
+                    System.err.println("ファイルのコピーに失敗しました．");
                     Logger.getLogger(Lily0Learning.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
