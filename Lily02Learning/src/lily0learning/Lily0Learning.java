@@ -17,12 +17,17 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -56,41 +61,41 @@ public class Lily0Learning {
         // フォルダ
         File newdir;
 
-//        // 初期化
-//        // フォルダを作る
-//        newdir = new File(DIR_NAME);
-//        newdir.mkdir();
-//        newdir = new File(DIR_NAME + File.separator + "0");
-//        newdir.mkdir();
-//        for (int i = 0; i < INDIVIDUAL_NUM; i++) {
-//            gis.add(new GeneticIndividual());
-//            gis.get(i).outputCSV(DIR_NAME + File.separator + "0" + File.separator + "weight0-" + i + ".csv");
-//        }
-//        newdir = new File(ONLINE_DIR_NAME);
-//        newdir.mkdir();
-//        newdir = new File(ONLINE_DIR_NAME + File.separator + "0");
-//        newdir.mkdir();
-//        for (int i = 0; i < INDIVIDUAL_NUM; i++) {
-//            gis.add(new GeneticIndividual());
-//            gis.get(i).outputCSV(ONLINE_DIR_NAME + File.separator + "0" + File.separator + "weight0-" + i + ".csv");
-//        }
-//        int count = 0;
-
-        // 途中から
-        int generation = 2180;
+        // 初期化
+        // フォルダを作る
+        newdir = new File(DIR_NAME);
+        newdir.mkdir();
+        newdir = new File(DIR_NAME + File.separator + "0");
+        newdir.mkdir();
         for (int i = 0; i < INDIVIDUAL_NUM; i++) {
-            String filePath = DIR_NAME;
-            filePath += File.separator;
-            filePath += generation;
-            filePath += File.separator;
-            filePath += "weight" + generation + "-";
-            filePath += i;
-            filePath += ".csv";
-            gis.add(new GeneticIndividual(filePath));
-//            System.out.println(gis.get(i));
+            gis.add(new GeneticIndividual());
+            gis.get(i).outputCSV(DIR_NAME + File.separator + "0" + File.separator + "weight0-" + i + ".csv");
         }
-        int count = generation;
-        
+        newdir = new File(ONLINE_DIR_NAME);
+        newdir.mkdir();
+        newdir = new File(ONLINE_DIR_NAME + File.separator + "0");
+        newdir.mkdir();
+        for (int i = 0; i < INDIVIDUAL_NUM; i++) {
+            gis.add(new GeneticIndividual());
+            gis.get(i).outputCSV(ONLINE_DIR_NAME + File.separator + "0" + File.separator + "weight0-" + i + ".csv");
+        }
+        int count = 0;
+
+//        // 途中から
+//        int generation = 2180;
+//        for (int i = 0; i < INDIVIDUAL_NUM; i++) {
+//            String filePath = DIR_NAME;
+//            filePath += File.separator;
+//            filePath += generation;
+//            filePath += File.separator;
+//            filePath += "weight" + generation + "-";
+//            filePath += i;
+//            filePath += ".csv";
+//            gis.add(new GeneticIndividual(filePath));
+////            System.out.println(gis.get(i));
+//        }
+//        int count = generation;
+//        
         
         // 兵庫県警に逮捕される。。。
         while (count < 1000000) {
@@ -186,7 +191,7 @@ public class Lily0Learning {
                 randomChildren.add(new GeneticIndividual());
             }
 
-            // 学習曲線を描画する用
+            // 学習曲線を描画する
             double ave = 0;
             for (GeneticIndividual e : elite) {
                 ave += e.getTotalScore() / 60.0;
@@ -233,7 +238,7 @@ public class Lily0Learning {
                 }
 
             // フォルダを作る
-            if (count % 500 == 0) {
+            if (count % 100 == 0) {
                 newdir = new File(ONLINE_DIR_NAME + File.separator + count);
                 newdir.mkdir();
 
@@ -252,6 +257,16 @@ public class Lily0Learning {
                     }
                     filePath += ".csv";
                     gis.get(i).outputCSV(filePath);
+                }
+                // 学習曲線
+                Path sourcePath = Paths.get(DIR_NAME + File.separator + "graph.csv");
+                Path targetPath = Paths.get(ONLINE_DIR_NAME + File.separator + "graph.csv");
+                try {
+                    Files.copy(sourcePath, targetPath);
+                } catch (IOException ex) {
+                    // コピーエラー
+                    System.out.println("ファイルのコピーに失敗しました．");
+                    Logger.getLogger(Lily0Learning.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
         }
