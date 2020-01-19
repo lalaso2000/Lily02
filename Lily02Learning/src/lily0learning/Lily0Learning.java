@@ -12,7 +12,11 @@ import ai.TajimaLabAI;
 import ai.Tochka;
 import gameElements.Game;
 import geneticAlgorithm.GeneticIndividual;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -34,7 +38,7 @@ public class Lily0Learning {
     private static final int BATTLE_NUM = 30;
     private static final double INDIVIDUAL_MUTATION_RATE = 0.05;
     private static final double GENOM_MUTATION_RATE = 0.025;
-    private static final String DIR_NAME = "test";
+    private static final String DIR_NAME = "test2";
 
     /**
      * @param args the command line arguments
@@ -167,6 +171,21 @@ public class Lily0Learning {
             ArrayList<GeneticIndividual> randomChildren = new ArrayList<>();
             for (int i = 0; i < RANDOM_NUM; i++) {
                 randomChildren.add(new GeneticIndividual());
+            }
+
+            // 学習曲線を描画する用
+            double ave = 0;
+            for (GeneticIndividual e : elite) {
+                ave += e.getTotalScore() / 60.0;
+            }
+            ave = ave / ELITE_NUM;
+            File graphFile = new File(DIR_NAME + File.separator + "graph.csv");
+            // ファイルに書き込む
+            try (PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(graphFile, true)))) {
+                pw.println(count + "," + ave);
+                pw.close();
+            } catch (IOException ex) {
+                System.err.println("ファイル書き込みエラー");
             }
 
             // 次の世代に引き継ぎ
