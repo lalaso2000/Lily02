@@ -81,19 +81,6 @@ public class Tochka extends TajimaLabAI {
         new Action("P", "7-1", "T5")
     };
 
-    
-//    private static final int PREFETCH_MAX_LEVEL = 8;    // 先読みの最高階数
-
-//    private double[][] flaskWeight = new double[12][3];
-//    private double[][] gearWeight = new double[12][3];
-//    private double[][][] moneyWeight = new double[12][11][3];
-//    private double[][] trendWeight = new double[12][3];
-//    private double[][] scoreWeight = new double[12][3];
-//    private double[][] machineWeight = new double[12][22];
-//    private double[][] startPlayerWeight = new double[12][3];
-//
-//    private final List<String> PLACE_FOR_PROFESSOR = Arrays.asList("6-1", "6-2", "6-3", "7-1");
-
     /**
      * コンストラクタ for learning
      *
@@ -103,7 +90,7 @@ public class Tochka extends TajimaLabAI {
      */
     public Tochka(Game game, GeneticIndividual gi, int playerNum) {
         super(game);
-        this.myName = "Lily 0";
+        this.myName = "Tochka5";
         this.myNumber = playerNum;
         this.enemyNumber = (playerNum + 1) % 2;
         // giから呼び出す
@@ -120,13 +107,13 @@ public class Tochka extends TajimaLabAI {
      */
     public Tochka(Game game, String weightFilePath) {
         super(game);
-        this.myName = "Tochka3";
+        this.myName = "Tochka5";
         loadWeights(weightFilePath);
     }
 
     public Tochka(Game game, int playerNum) {
         super(game);
-        this.myName = "Tochka3";
+        this.myName = "Tochka5";
         this.myNumber = playerNum;
 
         // とりあえずランダムで生成
@@ -150,6 +137,15 @@ public class Tochka extends TajimaLabAI {
             }
         }
     }
+    
+    public Tochka(Game game, String weightFilePath, int playerNum) {
+        super(game);
+        this.myName = "Tochka5";
+        this.myNumber = playerNum;
+        this.enemyNumber = (playerNum + 1) % 2;
+        loadWeights(weightFilePath);
+    }
+
 
     /**
      * 係数をファイルから読み込む ファイル形式は、1-INPUT_LENGTH行目が1層目、61-76行目が2層目、77-86行目が出口層の係数
