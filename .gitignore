@@ -209,3 +209,7 @@ dmypy.json
 
 # weight.csv
 weight*.csv
+outputs/output5-1/graph.csv
+outputs/output5-2/graph.csv
+outputs/output5-3/graph.csv
+outputs/output5-4300-graph.xlsx
