@@ -209,3 +209,7 @@ dmypy.json
 
 # weight.csv
 weight*.csv
+graph*.csv
+
+# executable jar
+!executableJar/*.jar

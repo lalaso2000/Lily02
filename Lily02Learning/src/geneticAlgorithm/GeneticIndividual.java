@@ -186,7 +186,7 @@ public class GeneticIndividual implements Comparable<GeneticIndividual> {
                     System.err.println((lineCount + 1) + "行目の列数が異なります");
                 }
             }
-            if (76 <= lineCount && lineCount < INPUT_LENGTH + MIDDLE_1_LENGTH + MIDDLE_2_LENGTH) {
+            if (INPUT_LENGTH + MIDDLE_1_LENGTH <= lineCount && lineCount < INPUT_LENGTH + MIDDLE_1_LENGTH + MIDDLE_2_LENGTH) {
                 if (nums.length != OUTPUT_LENGTH) {
                     System.err.println((lineCount + 1) + "行目の列数が異なります");
                 }
@@ -200,7 +200,7 @@ public class GeneticIndividual implements Comparable<GeneticIndividual> {
                     if (INPUT_LENGTH <= lineCount && lineCount < INPUT_LENGTH + MIDDLE_1_LENGTH) {
                         this.middle2Weight[lineCount - INPUT_LENGTH][numCount] = n;
                     }
-                    if (76 <= lineCount && lineCount < INPUT_LENGTH + MIDDLE_1_LENGTH + MIDDLE_2_LENGTH) {
+                    if (INPUT_LENGTH + MIDDLE_1_LENGTH <= lineCount && lineCount < INPUT_LENGTH + MIDDLE_1_LENGTH + MIDDLE_2_LENGTH) {
                         this.outWeight[lineCount - INPUT_LENGTH - MIDDLE_1_LENGTH][numCount] = n;
                     }
                 } catch (NumberFormatException ex) {
