@@ -125,13 +125,13 @@ public class ClientGUI extends javax.swing.JFrame implements MessageRecevable {
         jButton5 = new javax.swing.JButton();
         jLabel9 = new javax.swing.JLabel();
         nnPanel = new javax.swing.JPanel();
-        inputLayout = new javax.swing.JPanel();
-        inputMiddle1LineLayout = new javax.swing.JPanel();
-        middle1Layout = new javax.swing.JPanel();
-        middle1Middle2LineLayout = new javax.swing.JPanel();
-        middle2Layout = new javax.swing.JPanel();
-        middle2OutputLineLayout = new javax.swing.JPanel();
-        outputLayout = new javax.swing.JPanel();
+        inputPanel = new javax.swing.JPanel();
+        inputMiddle1LinePanel = new javax.swing.JPanel();
+        middle1Panel = new javax.swing.JPanel();
+        middle1Middle2LinePanel = new javax.swing.JPanel();
+        middle2Panel = new javax.swing.JPanel();
+        middle2OutputLinePanel = new javax.swing.JPanel();
+        outputPanel = new javax.swing.JPanel();
 
         jCheckBox1.setText("jCheckBox1");
 
@@ -247,117 +247,117 @@ public class ClientGUI extends javax.swing.JFrame implements MessageRecevable {
         nnPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         nnPanel.setLayout(new javax.swing.BoxLayout(nnPanel, javax.swing.BoxLayout.LINE_AXIS));
 
-        inputLayout.setBackground(new java.awt.Color(204, 255, 255));
-        inputLayout.setPreferredSize(new java.awt.Dimension(120, 400));
+        inputPanel.setBackground(new java.awt.Color(204, 255, 255));
+        inputPanel.setPreferredSize(new java.awt.Dimension(120, 400));
 
-        javax.swing.GroupLayout inputLayoutLayout = new javax.swing.GroupLayout(inputLayout);
-        inputLayout.setLayout(inputLayoutLayout);
-        inputLayoutLayout.setHorizontalGroup(
-            inputLayoutLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout inputPanelLayout = new javax.swing.GroupLayout(inputPanel);
+        inputPanel.setLayout(inputPanelLayout);
+        inputPanelLayout.setHorizontalGroup(
+            inputPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 156, Short.MAX_VALUE)
         );
-        inputLayoutLayout.setVerticalGroup(
-            inputLayoutLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 490, Short.MAX_VALUE)
+        inputPanelLayout.setVerticalGroup(
+            inputPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 400, Short.MAX_VALUE)
         );
 
-        nnPanel.add(inputLayout);
+        nnPanel.add(inputPanel);
 
-        inputMiddle1LineLayout.setBackground(new java.awt.Color(255, 255, 255));
-        inputMiddle1LineLayout.setPreferredSize(new java.awt.Dimension(20, 400));
+        inputMiddle1LinePanel.setBackground(new java.awt.Color(255, 255, 255));
+        inputMiddle1LinePanel.setPreferredSize(new java.awt.Dimension(20, 400));
 
-        javax.swing.GroupLayout inputMiddle1LineLayoutLayout = new javax.swing.GroupLayout(inputMiddle1LineLayout);
-        inputMiddle1LineLayout.setLayout(inputMiddle1LineLayoutLayout);
-        inputMiddle1LineLayoutLayout.setHorizontalGroup(
-            inputMiddle1LineLayoutLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout inputMiddle1LinePanelLayout = new javax.swing.GroupLayout(inputMiddle1LinePanel);
+        inputMiddle1LinePanel.setLayout(inputMiddle1LinePanelLayout);
+        inputMiddle1LinePanelLayout.setHorizontalGroup(
+            inputMiddle1LinePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 56, Short.MAX_VALUE)
         );
-        inputMiddle1LineLayoutLayout.setVerticalGroup(
-            inputMiddle1LineLayoutLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 490, Short.MAX_VALUE)
+        inputMiddle1LinePanelLayout.setVerticalGroup(
+            inputMiddle1LinePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 400, Short.MAX_VALUE)
         );
 
-        nnPanel.add(inputMiddle1LineLayout);
+        nnPanel.add(inputMiddle1LinePanel);
 
-        middle1Layout.setBackground(new java.awt.Color(255, 204, 255));
-        middle1Layout.setPreferredSize(new java.awt.Dimension(10, 400));
+        middle1Panel.setBackground(new java.awt.Color(255, 204, 255));
+        middle1Panel.setPreferredSize(new java.awt.Dimension(10, 400));
 
-        javax.swing.GroupLayout middle1LayoutLayout = new javax.swing.GroupLayout(middle1Layout);
-        middle1Layout.setLayout(middle1LayoutLayout);
-        middle1LayoutLayout.setHorizontalGroup(
-            middle1LayoutLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout middle1PanelLayout = new javax.swing.GroupLayout(middle1Panel);
+        middle1Panel.setLayout(middle1PanelLayout);
+        middle1PanelLayout.setHorizontalGroup(
+            middle1PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 46, Short.MAX_VALUE)
         );
-        middle1LayoutLayout.setVerticalGroup(
-            middle1LayoutLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 490, Short.MAX_VALUE)
+        middle1PanelLayout.setVerticalGroup(
+            middle1PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 400, Short.MAX_VALUE)
         );
 
-        nnPanel.add(middle1Layout);
+        nnPanel.add(middle1Panel);
 
-        middle1Middle2LineLayout.setBackground(new java.awt.Color(255, 255, 255));
-        middle1Middle2LineLayout.setPreferredSize(new java.awt.Dimension(20, 400));
+        middle1Middle2LinePanel.setBackground(new java.awt.Color(255, 255, 255));
+        middle1Middle2LinePanel.setPreferredSize(new java.awt.Dimension(20, 400));
 
-        javax.swing.GroupLayout middle1Middle2LineLayoutLayout = new javax.swing.GroupLayout(middle1Middle2LineLayout);
-        middle1Middle2LineLayout.setLayout(middle1Middle2LineLayoutLayout);
-        middle1Middle2LineLayoutLayout.setHorizontalGroup(
-            middle1Middle2LineLayoutLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout middle1Middle2LinePanelLayout = new javax.swing.GroupLayout(middle1Middle2LinePanel);
+        middle1Middle2LinePanel.setLayout(middle1Middle2LinePanelLayout);
+        middle1Middle2LinePanelLayout.setHorizontalGroup(
+            middle1Middle2LinePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 56, Short.MAX_VALUE)
         );
-        middle1Middle2LineLayoutLayout.setVerticalGroup(
-            middle1Middle2LineLayoutLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 490, Short.MAX_VALUE)
+        middle1Middle2LinePanelLayout.setVerticalGroup(
+            middle1Middle2LinePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 400, Short.MAX_VALUE)
         );
 
-        nnPanel.add(middle1Middle2LineLayout);
+        nnPanel.add(middle1Middle2LinePanel);
 
-        middle2Layout.setBackground(new java.awt.Color(255, 255, 204));
-        middle2Layout.setPreferredSize(new java.awt.Dimension(10, 400));
+        middle2Panel.setBackground(new java.awt.Color(255, 255, 204));
+        middle2Panel.setPreferredSize(new java.awt.Dimension(10, 400));
 
-        javax.swing.GroupLayout middle2LayoutLayout = new javax.swing.GroupLayout(middle2Layout);
-        middle2Layout.setLayout(middle2LayoutLayout);
-        middle2LayoutLayout.setHorizontalGroup(
-            middle2LayoutLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout middle2PanelLayout = new javax.swing.GroupLayout(middle2Panel);
+        middle2Panel.setLayout(middle2PanelLayout);
+        middle2PanelLayout.setHorizontalGroup(
+            middle2PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 46, Short.MAX_VALUE)
         );
-        middle2LayoutLayout.setVerticalGroup(
-            middle2LayoutLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 490, Short.MAX_VALUE)
+        middle2PanelLayout.setVerticalGroup(
+            middle2PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 400, Short.MAX_VALUE)
         );
 
-        nnPanel.add(middle2Layout);
+        nnPanel.add(middle2Panel);
 
-        middle2OutputLineLayout.setBackground(new java.awt.Color(255, 255, 255));
-        middle2OutputLineLayout.setPreferredSize(new java.awt.Dimension(20, 400));
+        middle2OutputLinePanel.setBackground(new java.awt.Color(255, 255, 255));
+        middle2OutputLinePanel.setPreferredSize(new java.awt.Dimension(20, 400));
 
-        javax.swing.GroupLayout middle2OutputLineLayoutLayout = new javax.swing.GroupLayout(middle2OutputLineLayout);
-        middle2OutputLineLayout.setLayout(middle2OutputLineLayoutLayout);
-        middle2OutputLineLayoutLayout.setHorizontalGroup(
-            middle2OutputLineLayoutLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout middle2OutputLinePanelLayout = new javax.swing.GroupLayout(middle2OutputLinePanel);
+        middle2OutputLinePanel.setLayout(middle2OutputLinePanelLayout);
+        middle2OutputLinePanelLayout.setHorizontalGroup(
+            middle2OutputLinePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 56, Short.MAX_VALUE)
         );
-        middle2OutputLineLayoutLayout.setVerticalGroup(
-            middle2OutputLineLayoutLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 490, Short.MAX_VALUE)
+        middle2OutputLinePanelLayout.setVerticalGroup(
+            middle2OutputLinePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 400, Short.MAX_VALUE)
         );
 
-        nnPanel.add(middle2OutputLineLayout);
+        nnPanel.add(middle2OutputLinePanel);
 
-        outputLayout.setBackground(new java.awt.Color(204, 255, 204));
-        outputLayout.setPreferredSize(new java.awt.Dimension(120, 400));
+        outputPanel.setBackground(new java.awt.Color(204, 255, 204));
+        outputPanel.setPreferredSize(new java.awt.Dimension(120, 400));
 
-        javax.swing.GroupLayout outputLayoutLayout = new javax.swing.GroupLayout(outputLayout);
-        outputLayout.setLayout(outputLayoutLayout);
-        outputLayoutLayout.setHorizontalGroup(
-            outputLayoutLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout outputPanelLayout = new javax.swing.GroupLayout(outputPanel);
+        outputPanel.setLayout(outputPanelLayout);
+        outputPanelLayout.setHorizontalGroup(
+            outputPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 156, Short.MAX_VALUE)
         );
-        outputLayoutLayout.setVerticalGroup(
-            outputLayoutLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 490, Short.MAX_VALUE)
+        outputPanelLayout.setVerticalGroup(
+            outputPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 400, Short.MAX_VALUE)
         );
 
-        nnPanel.add(outputLayout);
+        nnPanel.add(outputPanel);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -733,20 +733,15 @@ public class ClientGUI extends javax.swing.JFrame implements MessageRecevable {
 
     private void resetNNPanel() {
         // 円のサイズを決定する
-        double circleSize = inputLayout.getHeight() / Tochka.INPUT_LENGTH;
-        inputLayout.setLayout(new GridLayout(1, Tochka.INPUT_LENGTH));
-        JLabel[] circleJLabels = new JLabel[Tochka.INPUT_LENGTH];
-        for (int i = 0; i < Tochka.INPUT_LENGTH; i++) {
-            circleJLabels[i] = new JLabel("" + i);
-            circleJLabels[i].setBorder(new LineBorder(Color.yellow, 2, true));
-            inputLayout.add(circleJLabels[i]);
-        }
+        double circleSize = inputPanel.getHeight() / Tochka.INPUT_LENGTH;
+        inputPanel.setLayout(new GridLayout(1, 1));
+        
     }
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPanel inputLayout;
-    private javax.swing.JPanel inputMiddle1LineLayout;
+    private javax.swing.JPanel inputMiddle1LinePanel;
+    private javax.swing.JPanel inputPanel;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
@@ -774,11 +769,11 @@ public class ClientGUI extends javax.swing.JFrame implements MessageRecevable {
     private javax.swing.JTextField jTextField5;
     private javax.swing.JTextPane jTextPane1;
     private javax.swing.JToggleButton jToggleButton1;
-    private javax.swing.JPanel middle1Layout;
-    private javax.swing.JPanel middle1Middle2LineLayout;
-    private javax.swing.JPanel middle2Layout;
-    private javax.swing.JPanel middle2OutputLineLayout;
+    private javax.swing.JPanel middle1Middle2LinePanel;
+    private javax.swing.JPanel middle1Panel;
+    private javax.swing.JPanel middle2OutputLinePanel;
+    private javax.swing.JPanel middle2Panel;
     private javax.swing.JPanel nnPanel;
-    private javax.swing.JPanel outputLayout;
+    private javax.swing.JPanel outputPanel;
     // End of variables declaration//GEN-END:variables
 }

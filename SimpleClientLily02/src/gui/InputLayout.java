@@ -5,10 +5,14 @@
  */
 package gui;
 
+import ai.Tochka;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+
 /**
  *
  * @author niwatakumi
  */
-public class InputLayout {
+public class InputLayout extends JPanel{
     
 }
