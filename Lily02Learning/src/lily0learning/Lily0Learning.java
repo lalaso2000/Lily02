@@ -45,8 +45,8 @@ public class Lily0Learning {
     private static final int MIRROR_BATTLE_NUM = 10;
     private static final double INDIVIDUAL_MUTATION_RATE = 0.05;
     private static final double GENOM_MUTATION_RATE = 0.025;
-    private static final String DIR_NAME = "D:\\output5-3";
-    private static final String ONLINE_DIR_NAME = "C:\\Users\\raras\\OneDrive - 独立行政法人 国立高等専門学校機構\\Tochka\\Lily02\\outputs\\output5-3";
+    private static final String DIR_NAME = "D:\\output5-1";
+    private static final String ONLINE_DIR_NAME = "C:\\Users\\raras\\OneDrive - 独立行政法人 国立高等専門学校機構\\Tochka\\Lily02\\outputs\\output5-1";
 
     /**
      * @param args the command line arguments
@@ -81,7 +81,7 @@ public class Lily0Learning {
 //        }
 //        int count = 0;
         // 途中から
-        int generation = 4780;
+        int generation = 5570;
         for (int i = 0; i < INDIVIDUAL_NUM; i++) {
             String filePath = DIR_NAME;
             filePath += File.separator;
@@ -148,7 +148,7 @@ public class Lily0Learning {
 //                    gis.get(j).addTotalScore(scores[1] - scores[0]);
                 }
 
-                // 育成対象(gis.get(j))をMIRROR_BATTLE_NUM回100世代前のエリートたちと対戦させる
+                // 育成対象(gis.get(j))をMIRROR_BATTLE_NUM回4500代目のエリートたちと対戦させる
                 for (int i = 0; i < MIRROR_BATTLE_NUM; i++) {
                     // ゲーム初期化
                     Game game = new Game();
@@ -157,10 +157,10 @@ public class Lily0Learning {
                     ai[0] = new Tochka(game, gis.get(j), 0);
                     String oldEletePath = DIR_NAME;
                     oldEletePath += File.separator;
-                    oldEletePath += (count + i - 100);
+                    oldEletePath += 4500;
                     oldEletePath += File.separator;
-                    oldEletePath += "weight" + (count + i - 100) + "-";
-                    oldEletePath += 0;
+                    oldEletePath += "weight" + 4500 + "-";
+                    oldEletePath += i;
                     oldEletePath += ".csv";
                     ai[1] = new Tochka(game, oldEletePath, 1);
                     // 対戦
