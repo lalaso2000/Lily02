@@ -8,7 +8,12 @@ import ai.LaboAI;
 import ai.Tochka;
 import ai.TajimaLabAI;
 import gameElements.Game;
+import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.GridLayout;
+import java.awt.geom.Ellipse2D;
 import java.io.File;
 import java.io.IOException;
 import java.net.InetAddress;
@@ -16,7 +21,10 @@ import java.net.UnknownHostException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.border.LineBorder;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultStyledDocument;
 import javax.swing.text.SimpleAttributeSet;
@@ -64,6 +72,7 @@ public class ClientGUI extends javax.swing.JFrame implements MessageRecevable {
         this.jTextField2.setText(defaultIP);
         this.jTextField4.setText(defaultPort);
         this.setTitle(WINDOW_TITLE + " (" + myAI.getMyName() + ")");
+        this.resetNNPanel();
     }
 
     public ClientGUI() {
@@ -116,6 +125,13 @@ public class ClientGUI extends javax.swing.JFrame implements MessageRecevable {
         jButton5 = new javax.swing.JButton();
         jLabel9 = new javax.swing.JLabel();
         nnPanel = new javax.swing.JPanel();
+        inputLayout = new javax.swing.JPanel();
+        inputMiddle1LineLayout = new javax.swing.JPanel();
+        middle1Layout = new javax.swing.JPanel();
+        middle1Middle2LineLayout = new javax.swing.JPanel();
+        middle2Layout = new javax.swing.JPanel();
+        middle2OutputLineLayout = new javax.swing.JPanel();
+        outputLayout = new javax.swing.JPanel();
 
         jCheckBox1.setText("jCheckBox1");
 
@@ -229,27 +245,130 @@ public class ClientGUI extends javax.swing.JFrame implements MessageRecevable {
 
         nnPanel.setBackground(new java.awt.Color(255, 255, 255));
         nnPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        nnPanel.setLayout(new javax.swing.BoxLayout(nnPanel, javax.swing.BoxLayout.LINE_AXIS));
 
-        javax.swing.GroupLayout nnPanelLayout = new javax.swing.GroupLayout(nnPanel);
-        nnPanel.setLayout(nnPanelLayout);
-        nnPanelLayout.setHorizontalGroup(
-            nnPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+        inputLayout.setBackground(new java.awt.Color(204, 255, 255));
+        inputLayout.setPreferredSize(new java.awt.Dimension(120, 400));
+
+        javax.swing.GroupLayout inputLayoutLayout = new javax.swing.GroupLayout(inputLayout);
+        inputLayout.setLayout(inputLayoutLayout);
+        inputLayoutLayout.setHorizontalGroup(
+            inputLayoutLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 156, Short.MAX_VALUE)
         );
-        nnPanelLayout.setVerticalGroup(
-            nnPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 483, Short.MAX_VALUE)
+        inputLayoutLayout.setVerticalGroup(
+            inputLayoutLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 490, Short.MAX_VALUE)
         );
+
+        nnPanel.add(inputLayout);
+
+        inputMiddle1LineLayout.setBackground(new java.awt.Color(255, 255, 255));
+        inputMiddle1LineLayout.setPreferredSize(new java.awt.Dimension(20, 400));
+
+        javax.swing.GroupLayout inputMiddle1LineLayoutLayout = new javax.swing.GroupLayout(inputMiddle1LineLayout);
+        inputMiddle1LineLayout.setLayout(inputMiddle1LineLayoutLayout);
+        inputMiddle1LineLayoutLayout.setHorizontalGroup(
+            inputMiddle1LineLayoutLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 56, Short.MAX_VALUE)
+        );
+        inputMiddle1LineLayoutLayout.setVerticalGroup(
+            inputMiddle1LineLayoutLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 490, Short.MAX_VALUE)
+        );
+
+        nnPanel.add(inputMiddle1LineLayout);
+
+        middle1Layout.setBackground(new java.awt.Color(255, 204, 255));
+        middle1Layout.setPreferredSize(new java.awt.Dimension(10, 400));
+
+        javax.swing.GroupLayout middle1LayoutLayout = new javax.swing.GroupLayout(middle1Layout);
+        middle1Layout.setLayout(middle1LayoutLayout);
+        middle1LayoutLayout.setHorizontalGroup(
+            middle1LayoutLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 46, Short.MAX_VALUE)
+        );
+        middle1LayoutLayout.setVerticalGroup(
+            middle1LayoutLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 490, Short.MAX_VALUE)
+        );
+
+        nnPanel.add(middle1Layout);
+
+        middle1Middle2LineLayout.setBackground(new java.awt.Color(255, 255, 255));
+        middle1Middle2LineLayout.setPreferredSize(new java.awt.Dimension(20, 400));
+
+        javax.swing.GroupLayout middle1Middle2LineLayoutLayout = new javax.swing.GroupLayout(middle1Middle2LineLayout);
+        middle1Middle2LineLayout.setLayout(middle1Middle2LineLayoutLayout);
+        middle1Middle2LineLayoutLayout.setHorizontalGroup(
+            middle1Middle2LineLayoutLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 56, Short.MAX_VALUE)
+        );
+        middle1Middle2LineLayoutLayout.setVerticalGroup(
+            middle1Middle2LineLayoutLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 490, Short.MAX_VALUE)
+        );
+
+        nnPanel.add(middle1Middle2LineLayout);
+
+        middle2Layout.setBackground(new java.awt.Color(255, 255, 204));
+        middle2Layout.setPreferredSize(new java.awt.Dimension(10, 400));
+
+        javax.swing.GroupLayout middle2LayoutLayout = new javax.swing.GroupLayout(middle2Layout);
+        middle2Layout.setLayout(middle2LayoutLayout);
+        middle2LayoutLayout.setHorizontalGroup(
+            middle2LayoutLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 46, Short.MAX_VALUE)
+        );
+        middle2LayoutLayout.setVerticalGroup(
+            middle2LayoutLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 490, Short.MAX_VALUE)
+        );
+
+        nnPanel.add(middle2Layout);
+
+        middle2OutputLineLayout.setBackground(new java.awt.Color(255, 255, 255));
+        middle2OutputLineLayout.setPreferredSize(new java.awt.Dimension(20, 400));
+
+        javax.swing.GroupLayout middle2OutputLineLayoutLayout = new javax.swing.GroupLayout(middle2OutputLineLayout);
+        middle2OutputLineLayout.setLayout(middle2OutputLineLayoutLayout);
+        middle2OutputLineLayoutLayout.setHorizontalGroup(
+            middle2OutputLineLayoutLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 56, Short.MAX_VALUE)
+        );
+        middle2OutputLineLayoutLayout.setVerticalGroup(
+            middle2OutputLineLayoutLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 490, Short.MAX_VALUE)
+        );
+
+        nnPanel.add(middle2OutputLineLayout);
+
+        outputLayout.setBackground(new java.awt.Color(204, 255, 204));
+        outputLayout.setPreferredSize(new java.awt.Dimension(120, 400));
+
+        javax.swing.GroupLayout outputLayoutLayout = new javax.swing.GroupLayout(outputLayout);
+        outputLayout.setLayout(outputLayoutLayout);
+        outputLayoutLayout.setHorizontalGroup(
+            outputLayoutLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 156, Short.MAX_VALUE)
+        );
+        outputLayoutLayout.setVerticalGroup(
+            outputLayoutLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 490, Short.MAX_VALUE)
+        );
+
+        nnPanel.add(outputLayout);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1)
-                    .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(nnPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel3)
@@ -262,11 +381,11 @@ public class ClientGUI extends javax.swing.JFrame implements MessageRecevable {
                         .addComponent(jLabel5)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                    .addGroup(layout.createSequentialGroup()
                         .addComponent(jCheckBox2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jButton2))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel8)
@@ -292,12 +411,11 @@ public class ClientGUI extends javax.swing.JFrame implements MessageRecevable {
                             .addComponent(jButton3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jButton1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jButton5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addGroup(layout.createSequentialGroup()
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1)
                             .addComponent(jLabel9))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(nnPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -387,7 +505,7 @@ public class ClientGUI extends javax.swing.JFrame implements MessageRecevable {
         // チェックボックスを確認してAI起動
         if (this.jCheckBox2.isSelected()) {
             // 係数ファイルが選択されていない＝やり直し
-            if(this.weightFile == null){
+            if (this.weightFile == null) {
                 JOptionPane.showMessageDialog(this, "係数ファイルが指定されていません！", "error!", JOptionPane.ERROR_MESSAGE);
                 return;
             }
@@ -612,13 +730,23 @@ public class ClientGUI extends javax.swing.JFrame implements MessageRecevable {
             Logger.getLogger(ClientGUI.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    public void resetNN() {
-        
+
+    private void resetNNPanel() {
+        // 円のサイズを決定する
+        double circleSize = inputLayout.getHeight() / Tochka.INPUT_LENGTH;
+        inputLayout.setLayout(new GridLayout(1, Tochka.INPUT_LENGTH));
+        JLabel[] circleJLabels = new JLabel[Tochka.INPUT_LENGTH];
+        for (int i = 0; i < Tochka.INPUT_LENGTH; i++) {
+            circleJLabels[i] = new JLabel("" + i);
+            circleJLabels[i].setBorder(new LineBorder(Color.yellow, 2, true));
+            inputLayout.add(circleJLabels[i]);
+        }
     }
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel inputLayout;
+    private javax.swing.JPanel inputMiddle1LineLayout;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
@@ -646,6 +774,11 @@ public class ClientGUI extends javax.swing.JFrame implements MessageRecevable {
     private javax.swing.JTextField jTextField5;
     private javax.swing.JTextPane jTextPane1;
     private javax.swing.JToggleButton jToggleButton1;
+    private javax.swing.JPanel middle1Layout;
+    private javax.swing.JPanel middle1Middle2LineLayout;
+    private javax.swing.JPanel middle2Layout;
+    private javax.swing.JPanel middle2OutputLineLayout;
     private javax.swing.JPanel nnPanel;
+    private javax.swing.JPanel outputLayout;
     // End of variables declaration//GEN-END:variables
 }
