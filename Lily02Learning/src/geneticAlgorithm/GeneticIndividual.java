@@ -409,30 +409,30 @@ public class GeneticIndividual implements Comparable<GeneticIndividual> {
     @Override
     public int compareTo(GeneticIndividual o) {
         // 教師に対する勝数が多いほうが勝ち
-        if (this.teacherWin > o.teacherWin) {
+        if (this.teacherWin < o.teacherWin) {
             return 4;
-        } else if (this.teacherWin < o.teacherWin) {
+        } else if (this.teacherWin > o.teacherWin) {
             return -4;
         }
 
         // 教師に対するスコアが多いほうが勝ち
-        if (this.teacherScore > o.teacherScore) {
+        if (this.teacherScore < o.teacherScore) {
             return 3;
-        } else if (this.teacherScore < o.teacherScore) {
+        } else if (this.teacherScore > o.teacherScore) {
             return -3;
         }
 
         // 勝数が多いほうが勝ち
-        if (this.win > o.win) {
+        if (this.win < o.win) {
             return 2;
-        } else if (this.win < o.win) {
+        } else if (this.win > o.win) {
             return -2;
         }
 
         // 勝数が同じ時はスコアが多いほうが勝ち
-        if (this.totalScore > o.totalScore) {
+        if (this.totalScore < o.totalScore) {
             return 1;
-        } else if (this.totalScore < o.totalScore) {
+        } else if (this.totalScore > o.totalScore) {
             return -1;
         }
 

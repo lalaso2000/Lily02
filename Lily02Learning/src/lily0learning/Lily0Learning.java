@@ -41,12 +41,12 @@ public class Lily0Learning {
     private static final int ELITE_CHILDEN_NUM = 6;
     private static final int RANDOM_NUM = 5;
     private static final int INDIVIDUAL_NUM = ELITE_NUM + NON_ELITE_NUM + ELITE_CHILDEN_NUM + RANDOM_NUM;
-    private static final int BATTLE_NUM = 90;
-    private static final int MIRROR_BATTLE_NUM = 10;
+    private static final int BATTLE_NUM = 100;
+    private static final int MIRROR_BATTLE_NUM = 0;
     private static final double INDIVIDUAL_MUTATION_RATE = 0.05;
     private static final double GENOM_MUTATION_RATE = 0.025;
-    private static final String DIR_NAME = "D:\\output5-1";
-    private static final String ONLINE_DIR_NAME = "C:\\Users\\raras\\OneDrive - 独立行政法人 国立高等専門学校機構\\Tochka\\Lily02\\outputs\\output5-1";
+    private static final String DIR_NAME = "D:\\outputEX";
+    private static final String ONLINE_DIR_NAME = "C:\\Users\\raras\\OneDrive - 独立行政法人 国立高等専門学校機構\\Tochka\\Lily02\\outputs\\outputEX";
 
     /**
      * @param args the command line arguments
@@ -61,39 +61,39 @@ public class Lily0Learning {
         // フォルダ
         File newdir;
 
-//        // 初期化
-//        // フォルダを作る
-//        newdir = new File(DIR_NAME);
-//        newdir.mkdir();
-//        newdir = new File(DIR_NAME + File.separator + "0");
-//        newdir.mkdir();
-//        for (int i = 0; i < INDIVIDUAL_NUM; i++) {
-//            gis.add(new GeneticIndividual());
-//            gis.get(i).outputCSV(DIR_NAME + File.separator + "0" + File.separator + "weight0-" + i + ".csv");
-//        }
-//        newdir = new File(ONLINE_DIR_NAME);
-//        newdir.mkdir();
-//        newdir = new File(ONLINE_DIR_NAME + File.separator + "0");
-//        newdir.mkdir();
-//        for (int i = 0; i < INDIVIDUAL_NUM; i++) {
-//            gis.add(new GeneticIndividual());
-//            gis.get(i).outputCSV(ONLINE_DIR_NAME + File.separator + "0" + File.separator + "weight0-" + i + ".csv");
-//        }
-//        int count = 0;
-        // 途中から
-        int generation = 5570;
+        // 初期化
+        // フォルダを作る
+        newdir = new File(DIR_NAME);
+        newdir.mkdir();
+        newdir = new File(DIR_NAME + File.separator + "0");
+        newdir.mkdir();
         for (int i = 0; i < INDIVIDUAL_NUM; i++) {
-            String filePath = DIR_NAME;
-            filePath += File.separator;
-            filePath += generation;
-            filePath += File.separator;
-            filePath += "weight" + generation + "-";
-            filePath += i;
-            filePath += ".csv";
-            gis.add(new GeneticIndividual(filePath));
-//            System.out.println(gis.get(i));
+            gis.add(new GeneticIndividual());
+            gis.get(i).outputCSV(DIR_NAME + File.separator + "0" + File.separator + "weight0-" + i + ".csv");
         }
-        int count = generation;
+        newdir = new File(ONLINE_DIR_NAME);
+        newdir.mkdir();
+        newdir = new File(ONLINE_DIR_NAME + File.separator + "0");
+        newdir.mkdir();
+        for (int i = 0; i < INDIVIDUAL_NUM; i++) {
+            gis.add(new GeneticIndividual());
+            gis.get(i).outputCSV(ONLINE_DIR_NAME + File.separator + "0" + File.separator + "weight0-" + i + ".csv");
+        }
+        int count = 0;
+        // 途中から
+//        int generation = 5810;
+//        for (int i = 0; i < INDIVIDUAL_NUM; i++) {
+//            String filePath = DIR_NAME;
+//            filePath += File.separator;
+//            filePath += generation;
+//            filePath += File.separator;
+//            filePath += "weight" + generation + "-";
+//            filePath += i;
+//            filePath += ".csv";
+//            gis.add(new GeneticIndividual(filePath));
+////            System.out.println(gis.get(i));
+//        }
+//        int count = generation;
 
         // 兵庫県警に逮捕される。。。
         while (count < 1000000) {
