@@ -10,9 +10,13 @@ import ai.TajimaLabAI;
 import gameElements.Game;
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridLayout;
+import java.awt.LayoutManager;
+import java.awt.TextField;
 import java.awt.geom.Ellipse2D;
 import java.io.File;
 import java.io.IOException;
@@ -20,10 +24,12 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.BoxLayout;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultStyledDocument;
@@ -52,7 +58,13 @@ public class ClientGUI extends javax.swing.JFrame implements MessageRecevable {
 
     // 選択された重みファイル
     private File weightFile = null;
-    private final String DEFAULT_FORDER_PATH = "";
+    private final String DEFAULT_FORDER_PATH = "/Users/niwatakumi/OneDrive - 独立行政法人 国立高等専門学校機構/Tochka/Lily02/outputs";
+
+    // 入力用テキストボックス
+    private JTextField[] inputFields = new JTextField[Tochka.INPUT_LENGTH];
+    private JTextField[] middle1Fields = new JTextField[Tochka.MIDDLE_1_LENGTH];
+    private JTextField[] middle2Fields = new JTextField[Tochka.MIDDLE_2_LENGTH];
+    private JTextField[] outputFields = new JTextField[Tochka.OUTPUT_LENGTH];
 
     /**
      * コンストラクタ　文字の表示部分のみを初期化する
@@ -72,7 +84,7 @@ public class ClientGUI extends javax.swing.JFrame implements MessageRecevable {
         this.jTextField2.setText(defaultIP);
         this.jTextField4.setText(defaultPort);
         this.setTitle(WINDOW_TITLE + " (" + myAI.getMyName() + ")");
-        this.resetNNPanel();
+        this.initNNPanel();
     }
 
     public ClientGUI() {
@@ -88,6 +100,7 @@ public class ClientGUI extends javax.swing.JFrame implements MessageRecevable {
         this.jTextField2.setText(defaultIP);
         this.jTextField4.setText(defaultPort);
         this.setTitle(WINDOW_TITLE + "(Lily 0)");
+        this.initNNPanel();
     }
 
     /**
@@ -125,13 +138,6 @@ public class ClientGUI extends javax.swing.JFrame implements MessageRecevable {
         jButton5 = new javax.swing.JButton();
         jLabel9 = new javax.swing.JLabel();
         nnPanel = new javax.swing.JPanel();
-        inputPanel = new javax.swing.JPanel();
-        inputMiddle1LinePanel = new javax.swing.JPanel();
-        middle1Panel = new javax.swing.JPanel();
-        middle1Middle2LinePanel = new javax.swing.JPanel();
-        middle2Panel = new javax.swing.JPanel();
-        middle2OutputLinePanel = new javax.swing.JPanel();
-        outputPanel = new javax.swing.JPanel();
 
         jCheckBox1.setText("jCheckBox1");
 
@@ -246,118 +252,6 @@ public class ClientGUI extends javax.swing.JFrame implements MessageRecevable {
         nnPanel.setBackground(new java.awt.Color(255, 255, 255));
         nnPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
         nnPanel.setLayout(new javax.swing.BoxLayout(nnPanel, javax.swing.BoxLayout.LINE_AXIS));
-
-        inputPanel.setBackground(new java.awt.Color(204, 255, 255));
-        inputPanel.setPreferredSize(new java.awt.Dimension(120, 400));
-
-        javax.swing.GroupLayout inputPanelLayout = new javax.swing.GroupLayout(inputPanel);
-        inputPanel.setLayout(inputPanelLayout);
-        inputPanelLayout.setHorizontalGroup(
-            inputPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 156, Short.MAX_VALUE)
-        );
-        inputPanelLayout.setVerticalGroup(
-            inputPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
-        );
-
-        nnPanel.add(inputPanel);
-
-        inputMiddle1LinePanel.setBackground(new java.awt.Color(255, 255, 255));
-        inputMiddle1LinePanel.setPreferredSize(new java.awt.Dimension(20, 400));
-
-        javax.swing.GroupLayout inputMiddle1LinePanelLayout = new javax.swing.GroupLayout(inputMiddle1LinePanel);
-        inputMiddle1LinePanel.setLayout(inputMiddle1LinePanelLayout);
-        inputMiddle1LinePanelLayout.setHorizontalGroup(
-            inputMiddle1LinePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 56, Short.MAX_VALUE)
-        );
-        inputMiddle1LinePanelLayout.setVerticalGroup(
-            inputMiddle1LinePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
-        );
-
-        nnPanel.add(inputMiddle1LinePanel);
-
-        middle1Panel.setBackground(new java.awt.Color(255, 204, 255));
-        middle1Panel.setPreferredSize(new java.awt.Dimension(10, 400));
-
-        javax.swing.GroupLayout middle1PanelLayout = new javax.swing.GroupLayout(middle1Panel);
-        middle1Panel.setLayout(middle1PanelLayout);
-        middle1PanelLayout.setHorizontalGroup(
-            middle1PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 46, Short.MAX_VALUE)
-        );
-        middle1PanelLayout.setVerticalGroup(
-            middle1PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
-        );
-
-        nnPanel.add(middle1Panel);
-
-        middle1Middle2LinePanel.setBackground(new java.awt.Color(255, 255, 255));
-        middle1Middle2LinePanel.setPreferredSize(new java.awt.Dimension(20, 400));
-
-        javax.swing.GroupLayout middle1Middle2LinePanelLayout = new javax.swing.GroupLayout(middle1Middle2LinePanel);
-        middle1Middle2LinePanel.setLayout(middle1Middle2LinePanelLayout);
-        middle1Middle2LinePanelLayout.setHorizontalGroup(
-            middle1Middle2LinePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 56, Short.MAX_VALUE)
-        );
-        middle1Middle2LinePanelLayout.setVerticalGroup(
-            middle1Middle2LinePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
-        );
-
-        nnPanel.add(middle1Middle2LinePanel);
-
-        middle2Panel.setBackground(new java.awt.Color(255, 255, 204));
-        middle2Panel.setPreferredSize(new java.awt.Dimension(10, 400));
-
-        javax.swing.GroupLayout middle2PanelLayout = new javax.swing.GroupLayout(middle2Panel);
-        middle2Panel.setLayout(middle2PanelLayout);
-        middle2PanelLayout.setHorizontalGroup(
-            middle2PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 46, Short.MAX_VALUE)
-        );
-        middle2PanelLayout.setVerticalGroup(
-            middle2PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
-        );
-
-        nnPanel.add(middle2Panel);
-
-        middle2OutputLinePanel.setBackground(new java.awt.Color(255, 255, 255));
-        middle2OutputLinePanel.setPreferredSize(new java.awt.Dimension(20, 400));
-
-        javax.swing.GroupLayout middle2OutputLinePanelLayout = new javax.swing.GroupLayout(middle2OutputLinePanel);
-        middle2OutputLinePanel.setLayout(middle2OutputLinePanelLayout);
-        middle2OutputLinePanelLayout.setHorizontalGroup(
-            middle2OutputLinePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 56, Short.MAX_VALUE)
-        );
-        middle2OutputLinePanelLayout.setVerticalGroup(
-            middle2OutputLinePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
-        );
-
-        nnPanel.add(middle2OutputLinePanel);
-
-        outputPanel.setBackground(new java.awt.Color(204, 255, 204));
-        outputPanel.setPreferredSize(new java.awt.Dimension(120, 400));
-
-        javax.swing.GroupLayout outputPanelLayout = new javax.swing.GroupLayout(outputPanel);
-        outputPanel.setLayout(outputPanelLayout);
-        outputPanelLayout.setHorizontalGroup(
-            outputPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 156, Short.MAX_VALUE)
-        );
-        outputPanelLayout.setVerticalGroup(
-            outputPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
-        );
-
-        nnPanel.add(outputPanel);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -731,17 +625,102 @@ public class ClientGUI extends javax.swing.JFrame implements MessageRecevable {
         }
     }
 
-    private void resetNNPanel() {
-        // 円のサイズを決定する
-        double circleSize = inputPanel.getHeight() / Tochka.INPUT_LENGTH;
-        inputPanel.setLayout(new GridLayout(1, 1));
-        
+    private void initNNPanel() {
+        this.nnPanel.setLayout(new BoxLayout(this.nnPanel, BoxLayout.LINE_AXIS));
+        // 入力を表示するテキストボックスを配置
+        JPanel inputJPanel = new JPanel();
+        inputJPanel.setLayout(new GridLayout(10, 6));
+        inputJPanel.setBackground(new Color(138, 230, 214));
+        for (int i = 0; i < Tochka.INPUT_LENGTH; i++) {
+            this.inputFields[i] = new JTextField("0", 1);
+            inputJPanel.add(this.inputFields[i]);
+        }
+        this.nnPanel.add(inputJPanel);
+        // 入力と中間層１の間のレイアウト
+        JPanel inputMiddle1JPanel = new JPanel();
+        inputMiddle1JPanel.setLayout(new BoxLayout(inputMiddle1JPanel, BoxLayout.PAGE_AXIS));
+        inputMiddle1JPanel.setBackground(new Color(255, 255, 255));
+        inputMiddle1JPanel.setPreferredSize(new Dimension(30, 60));
+        this.nnPanel.add(inputMiddle1JPanel);
+        // 中間層１のレイアウト
+        JPanel middle1JPanel = new JPanel();
+        middle1JPanel.setLayout(new GridLayout(8, 4));
+        middle1JPanel.setBackground(new Color(138, 230, 153));
+        for (int i = 0; i < Tochka.MIDDLE_1_LENGTH; i++) {
+            this.middle1Fields[i] = new JTextField("0", 2);
+            middle1JPanel.add(this.middle1Fields[i]);
+        }
+        this.nnPanel.add(middle1JPanel);
+        // 中間層１と中間層２の間のレイアウト
+        JPanel middle1Middle2JPanel = new JPanel();
+        middle1Middle2JPanel.setLayout(new BoxLayout(middle1Middle2JPanel, BoxLayout.PAGE_AXIS));
+        middle1Middle2JPanel.setBackground(new Color(255, 255, 255));
+        middle1Middle2JPanel.setPreferredSize(new Dimension(30, 60));
+        this.nnPanel.add(middle1Middle2JPanel);
+        // 中間層２のレイアウト
+        JPanel middle2JPanel = new JPanel();
+        middle2JPanel.setLayout(new GridLayout(8, 2));
+        middle2JPanel.setBackground(new Color(230, 230, 138));
+        for (int i = 0; i < Tochka.MIDDLE_2_LENGTH; i++) {
+            this.middle2Fields[i] = new JTextField("0", 2);
+            middle2JPanel.add(this.middle2Fields[i]);
+        }
+        this.nnPanel.add(middle2JPanel);
+        // 中間層２と出力の間のレイアウト
+        JPanel middle2OutputJPanel = new JPanel();
+        middle2OutputJPanel.setLayout(new BoxLayout(middle2OutputJPanel, BoxLayout.PAGE_AXIS));
+        middle2OutputJPanel.setBackground(new Color(255, 255, 255));
+        middle2OutputJPanel.setPreferredSize(new Dimension(30, 60));
+        this.nnPanel.add(middle2OutputJPanel);
+        // 出力の間のレイアウト
+        JPanel OutputJPanel = new JPanel();
+        OutputJPanel.setLayout(new GridLayout(8, 4));
+        OutputJPanel.setBackground(new Color(230, 138, 138));
+        for (int i = 0; i < Tochka.OUTPUT_LENGTH; i++) {
+            this.outputFields[i] = new JTextField("0", 6);
+            OutputJPanel.add(this.outputFields[i]);
+        }
+        this.nnPanel.add(OutputJPanel);
+    }
+
+    public void drawNetwork(String input, String middle1, String middle2, double[] output) {
+        for (int i = 0; i < Tochka.INPUT_LENGTH; i++) {
+            String s = input.substring(i, i+1);
+            this.inputFields[i].setText(input.substring(i, i + 1));
+            if(s.equals("1")) {
+                this.inputFields[i].setBackground(Color.red);
+            }
+            else {
+                this.inputFields[i].setBackground(Color.WHITE);
+            }
+        }
+        for (int i = 0; i < Tochka.MIDDLE_1_LENGTH; i++) {
+            String s = middle1.substring(i, i+1);
+            this.middle1Fields[i].setText(s);
+            if(s.equals("1")) {
+                this.middle1Fields[i].setBackground(Color.red);
+            }
+            else {
+                this.middle1Fields[i].setBackground(Color.WHITE);
+            }
+        }
+        for (int i = 0; i < Tochka.MIDDLE_2_LENGTH; i++) {
+            String s = middle2.substring(i, i+1);
+            this.middle2Fields[i].setText(s);
+            if(s.equals("1")){
+                this.middle2Fields[i].setBackground(Color.red);
+            }
+            else {
+                this.middle2Fields[i].setBackground(Color.white);
+            }
+        }
+        for (int i = 0; i < Tochka.OUTPUT_LENGTH; i++) {
+            this.outputFields[i].setText(String.format("%1$.5f", output[i]));
+        }
     }
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPanel inputMiddle1LinePanel;
-    private javax.swing.JPanel inputPanel;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
@@ -769,11 +748,6 @@ public class ClientGUI extends javax.swing.JFrame implements MessageRecevable {
     private javax.swing.JTextField jTextField5;
     private javax.swing.JTextPane jTextPane1;
     private javax.swing.JToggleButton jToggleButton1;
-    private javax.swing.JPanel middle1Middle2LinePanel;
-    private javax.swing.JPanel middle1Panel;
-    private javax.swing.JPanel middle2OutputLinePanel;
-    private javax.swing.JPanel middle2Panel;
     private javax.swing.JPanel nnPanel;
-    private javax.swing.JPanel outputPanel;
     // End of variables declaration//GEN-END:variables
 }

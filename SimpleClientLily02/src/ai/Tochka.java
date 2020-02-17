@@ -355,6 +355,9 @@ public class Tochka extends TajimaLabAI {
             }
             output[j] = sum;
         }
+        
+        // GUIに表示
+        this.gui.drawNetwork(input.getRowVal(), middle1Out, middle2Out, output);
 
         // 順位づけする
         Map<Action, Double> map = new HashMap<>();
