@@ -258,8 +258,8 @@ public class ClientGUI extends javax.swing.JFrame implements MessageRecevable {
 
         nnPanel.setBackground(new java.awt.Color(255, 255, 255));
         nnPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        nnPanel.setMaximumSize(new java.awt.Dimension(2000, 2000));
-        nnPanel.setMinimumSize(new java.awt.Dimension(0, 0));
+        nnPanel.setMaximumSize(new java.awt.Dimension(2, 2));
+        nnPanel.setMinimumSize(new java.awt.Dimension(2, 2));
         nnPanel.setLayout(new javax.swing.BoxLayout(nnPanel, javax.swing.BoxLayout.LINE_AXIS));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -367,8 +367,8 @@ public class ClientGUI extends javax.swing.JFrame implements MessageRecevable {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel9)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(nnPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 401, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(nnPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 401, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         pack();
@@ -638,12 +638,46 @@ public class ClientGUI extends javax.swing.JFrame implements MessageRecevable {
         this.nnPanel.setLayout(new BoxLayout(this.nnPanel, BoxLayout.LINE_AXIS));
         // 入力を表示するテキストボックスを配置
         JPanel inputJPanel = new JPanel();
-        inputJPanel.setLayout(new GridLayout(10, 6));
         inputJPanel.setBackground(new Color(138, 230, 214));
-        for (int i = 0; i < Tochka.INPUT_LENGTH; i++) {
-            this.inputFields[i] = new JTextField("0", 1);
-            inputJPanel.add(this.inputFields[i]);
-        }
+//        inputJPanel.setLayout(new GridLayout(10, 6));
+//        for (int i = 0; i < Tochka.INPUT_LENGTH; i++) {
+//            this.inputFields[i] = new JTextField("0", 1);
+//            inputJPanel.add(this.inputFields[i]);
+//        }
+        inputJPanel.setLayout(new GridLayout(14, 1));
+        // 入力：自分のお金
+        inputJPanel.add(this.makeInputPanel("My money", 0, 6));
+        // 入力：自分のフラスコ
+        inputJPanel.add(this.makeInputPanel("My Flask", 6, 10));
+        // 入力：自分のギア
+        inputJPanel.add(this.makeInputPanel("My Gear", 10, 14));
+        // 入力：自分の機械
+        inputJPanel.add(this.makeInputPanel("My Machine", 14, 20));
+        
+        // 入力：相手のお金
+        inputJPanel.add(this.makeInputPanel("Enemy money", 20, 26));
+        // 入力：相手のフラスコ
+        inputJPanel.add(this.makeInputPanel("Enemy Flask", 26, 30));
+        // 入力：相手のギア
+        inputJPanel.add(this.makeInputPanel("Enemy Gear", 30, 34));
+        // 入力：相手の機械
+        inputJPanel.add(this.makeInputPanel("Enemy Machine", 34, 40));
+        
+        // 入力：スコア勝ち負け
+        inputJPanel.add(this.makeInputPanel("Win or Lose Total Score", 40, 41));
+        // 入力：スコア差
+        inputJPanel.add(this.makeInputPanel("Total Score Difference", 41, 46));
+        
+        // 入力：トレンドスコア勝ち負け
+        inputJPanel.add(this.makeInputPanel("Win or Lose Trend Score", 46, 47));
+        // 入力：トレンドスコア差
+        inputJPanel.add(this.makeInputPanel("Trend Score Difference", 47, 52));
+        
+        // 入力：現在の手数
+        inputJPanel.add(this.makeInputPanel("Hand Count", 52, 59));
+        // 入力：先行かどうか
+        inputJPanel.add(this.makeInputPanel("Start Player", 59, 60));
+
         this.nnPanel.add(inputJPanel);
         // 入力と中間層１の間のレイアウト
         JPanel inputMiddle1JPanel = new JPanel();
@@ -683,13 +717,42 @@ public class ClientGUI extends javax.swing.JFrame implements MessageRecevable {
         this.nnPanel.add(middle2OutputJPanel);
         // 出力の間のレイアウト
         JPanel OutputJPanel = new JPanel();
-        OutputJPanel.setLayout(new GridLayout(8, 4));
+        OutputJPanel.setLayout(new GridLayout(16, 2));
         OutputJPanel.setBackground(new Color(230, 138, 138));
         for (int i = 0; i < Tochka.OUTPUT_LENGTH; i++) {
+            JPanel actionJPanel = new JPanel();
+            actionJPanel.setLayout(new GridLayout(1, 2));
+            actionJPanel.setBackground(new Color(230, 138, 138));
+            Action a = Tochka.ACTIONS[i];
+            String actionString = a.place;
+            if (!"".equals(a.option)) {
+                actionString += " (" + a.option + ")";
+            }
+            JLabel actionLabel = new JLabel(actionString);
+            actionJPanel.add(actionLabel);
             this.outputFields[i] = new JTextField("0", 6);
-            OutputJPanel.add(this.outputFields[i]);
+            actionJPanel.add(this.outputFields[i]);
+            OutputJPanel.add(actionJPanel);
         }
         this.nnPanel.add(OutputJPanel);
+    }
+
+    private JPanel makeInputPanel(String name, int beginIndex, int endIndex) {
+        // 入力：自分のお金
+        JPanel p = new JPanel();
+        p.setLayout(new GridLayout(1, 2));
+        p.setBackground(new Color(138, 230, 214));
+        JLabel l = new JLabel(name + ": ");
+        p.add(l);
+        JPanel cp = new JPanel();
+        cp.setLayout(new GridLayout(1, endIndex - beginIndex));
+        cp.setBackground(new Color(138, 230, 214));
+        for (int i = beginIndex; i < endIndex; i++) {
+            this.inputFields[i] = new JTextField("0", 1);
+            cp.add(this.inputFields[i]);
+        }
+        p.add(cp);
+        return p;
     }
 
     public void resetNetwork() {
