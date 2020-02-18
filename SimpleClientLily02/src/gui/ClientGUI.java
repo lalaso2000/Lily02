@@ -4,6 +4,7 @@
  */
 package gui;
 
+import ai.Action;
 import ai.LaboAI;
 import ai.Tochka;
 import ai.TajimaLabAI;
@@ -36,6 +37,9 @@ import javax.swing.text.DefaultStyledDocument;
 import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 import network.ServerConnecter;
+import java.util.Arrays;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  *
@@ -52,6 +56,7 @@ public class ClientGUI extends javax.swing.JFrame implements MessageRecevable {
     private DefaultStyledDocument document;
     //BlockusAI
     private TajimaLabAI myAI;
+    private Game game;
 
     private String defaultIP;
     private String defaultPort = "18420";
@@ -65,7 +70,6 @@ public class ClientGUI extends javax.swing.JFrame implements MessageRecevable {
     private JTextField[] middle1Fields = new JTextField[Tochka.MIDDLE_1_LENGTH];
     private JTextField[] middle2Fields = new JTextField[Tochka.MIDDLE_2_LENGTH];
     private JTextField[] outputFields = new JTextField[Tochka.OUTPUT_LENGTH];
-
 
     /**
      * コンストラクタ　文字の表示部分のみを初期化する
@@ -408,9 +412,9 @@ public class ClientGUI extends javax.swing.JFrame implements MessageRecevable {
                 JOptionPane.showMessageDialog(this, "係数ファイルが指定されていません！", "error!", JOptionPane.ERROR_MESSAGE);
                 return;
             }
-            Game game = new Game();
+            this.game = new Game();
             try {
-                this.myAI = new Tochka(game, this.weightFile.getCanonicalPath());
+                this.myAI = new Tochka(this.game, this.weightFile.getCanonicalPath());
             } catch (IOException ex) {
                 Logger.getLogger(ClientGUI.class.getName()).log(Level.SEVERE, null, ex);
                 return;
@@ -752,9 +756,44 @@ public class ClientGUI extends javax.swing.JFrame implements MessageRecevable {
     }
 
     public void drawOutput(double[] output) {
+        // 順位を求める
+        int len = output.length;
+        double temp[] = new double[len];
+        for (int i = 0; i < len; i++) {
+            temp[i] = output[i];
+        }
+        Arrays.sort(temp);
+        double outputDesc[] = new double[len];
+        for (int i = 0; i < len; i++) {
+            outputDesc[i] = temp[len - 1 - i];
+        }
+        Map<Double, Integer> outputRankingMap = new LinkedHashMap<>();
+        int rank = 0;
+        outputRankingMap.put(outputDesc[0], rank);
+        for (int i = 1; i < len; i++) {
+            if (outputDesc[i] != outputDesc[i - 1]) {
+                rank = i + 1;
+            }
+            outputRankingMap.put(outputDesc[i], rank);
+        }
+
         for (int i = 0; i < Tochka.OUTPUT_LENGTH; i++) {
             this.outputFields[i].setText(String.format("%1$.5f", output[i]));
+            if (!((Tochka) this.myAI).canPutWorkerInActions(i)) {
+                this.outputFields[i].setBackground(Color.darkGray);
+            } else {
+                int r = outputRankingMap.get(output[i]);
+                if (r < Tochka.OUTPUT_LENGTH / 2) {
+                    int c = (int) (255 - 255 * (1.0 - r / (Tochka.OUTPUT_LENGTH / 2.0)));
+                    this.outputFields[i].setBackground(new Color(255, c, c));
+                } else {
+//                this.outputFields[i].setBackground(new Color(0, 0, 0));
+                    int c = (int) (255 * (1.0 - (r - Tochka.OUTPUT_LENGTH / 2) / (Tochka.OUTPUT_LENGTH / 2.0)));
+                    this.outputFields[i].setBackground(new Color(c, c, 255));
+                }
+            }
         }
+
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

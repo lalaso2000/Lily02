@@ -365,7 +365,7 @@ public class Tochka extends TajimaLabAI {
             }
             output[j] = sum;
         }
-        
+
         // 出力をGUIで表示
         this.gui.drawOutput(output);
 
@@ -400,6 +400,20 @@ public class Tochka extends TajimaLabAI {
         }
     }
 
+    public boolean canPutWorkerInActions(int i) {
+        Action a = ACTIONS[i];
+        String w = a.worker;
+        String p = a.place;
+        String o = a.option;
+        if (this.gameBoard.canPutWorker(myNumber, p, w, o)) {
+            return true;
+        } else if (this.gameBoard.canPutWorker(myNumber, p, "P", o)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     /**
      * 考えるフェーズ 手を打つところまで実装
      */
@@ -409,10 +423,10 @@ public class Tochka extends TajimaLabAI {
         this.addMessage("==========================");
         this.addMessage("========== thinking ==========");
         this.addMessage("==========================");
-        
+
         // guiのnetwork表示をリセット
         this.gui.resetNetwork();
-        
+
         this.handCount += 1;
 
         Action bestAction = null;
