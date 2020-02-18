@@ -43,7 +43,7 @@ public class Tochka extends TajimaLabAI {
     private String middle1Out;
     private String middle2Out;
     private double[] output;
-    
+
     public static final int INPUT_LENGTH = 60;
     public static final int MIDDLE_1_LENGTH = 32;
     public static final int MIDDLE_2_LENGTH = 16;
@@ -103,15 +103,17 @@ public class Tochka extends TajimaLabAI {
      */
     public Tochka(Game game, String weightFilePath) {
         super(game);
-        this.myName = "Tochka3";
+        // AI名をファイル名にする
+        File file = new File(weightFilePath);
+        this.myName = file.getName().split("\\.")[0];
         loadWeights(weightFilePath);
     }
 
     public Tochka(Game game) {
         super(game);
-        this.myName = "Tochka3";
+        this.myName = "Tochka4";
 
-         // とりあえずランダムで生成
+        // とりあえずランダムで生成
         this.middle1Weight = new double[INPUT_LENGTH][MIDDLE_1_LENGTH];
         Random rand = new Random();
         for (int i = 0; i < INPUT_LENGTH; i++) {
@@ -166,7 +168,7 @@ public class Tochka extends TajimaLabAI {
         }
 
         // 行数が異なる
-        if (lines.size() != INPUT_LENGTH+MIDDLE_1_LENGTH+MIDDLE_2_LENGTH) {
+        if (lines.size() != INPUT_LENGTH + MIDDLE_1_LENGTH + MIDDLE_2_LENGTH) {
             System.err.println("csvの行数が不正です。");
         }
 
@@ -181,12 +183,12 @@ public class Tochka extends TajimaLabAI {
                     System.err.println((lineCount + 1) + "行目の列数が異なります");
                 }
             }
-            if (INPUT_LENGTH <= lineCount && lineCount < INPUT_LENGTH+MIDDLE_1_LENGTH) {
+            if (INPUT_LENGTH <= lineCount && lineCount < INPUT_LENGTH + MIDDLE_1_LENGTH) {
                 if (nums.length != MIDDLE_2_LENGTH) {
                     System.err.println((lineCount + 1) + "行目の列数が異なります");
                 }
             }
-            if (INPUT_LENGTH+MIDDLE_1_LENGTH <= lineCount && lineCount < INPUT_LENGTH+MIDDLE_1_LENGTH+MIDDLE_2_LENGTH) {
+            if (INPUT_LENGTH + MIDDLE_1_LENGTH <= lineCount && lineCount < INPUT_LENGTH + MIDDLE_1_LENGTH + MIDDLE_2_LENGTH) {
                 if (nums.length != OUTPUT_LENGTH) {
                     System.err.println((lineCount + 1) + "行目の列数が異なります");
                 }
@@ -197,11 +199,11 @@ public class Tochka extends TajimaLabAI {
                     if (0 <= lineCount && lineCount < INPUT_LENGTH) {
                         this.middle1Weight[lineCount][numCount] = n;
                     }
-                    if (INPUT_LENGTH <= lineCount && lineCount < INPUT_LENGTH+MIDDLE_1_LENGTH) {
-                        this.middle2Weight[lineCount-INPUT_LENGTH][numCount] = n;
+                    if (INPUT_LENGTH <= lineCount && lineCount < INPUT_LENGTH + MIDDLE_1_LENGTH) {
+                        this.middle2Weight[lineCount - INPUT_LENGTH][numCount] = n;
                     }
-                    if (INPUT_LENGTH+MIDDLE_1_LENGTH <= lineCount && lineCount < INPUT_LENGTH+MIDDLE_1_LENGTH+MIDDLE_2_LENGTH) {
-                        this.outWeight[lineCount-(INPUT_LENGTH+MIDDLE_1_LENGTH)][numCount] = n;
+                    if (INPUT_LENGTH + MIDDLE_1_LENGTH <= lineCount && lineCount < INPUT_LENGTH + MIDDLE_1_LENGTH + MIDDLE_2_LENGTH) {
+                        this.outWeight[lineCount - (INPUT_LENGTH + MIDDLE_1_LENGTH)][numCount] = n;
                     }
                 } catch (NumberFormatException ex) {
                     System.err.println("数値じゃないものが含まれています。");

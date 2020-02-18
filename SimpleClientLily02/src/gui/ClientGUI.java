@@ -66,6 +66,7 @@ public class ClientGUI extends javax.swing.JFrame implements MessageRecevable {
     private JTextField[] middle2Fields = new JTextField[Tochka.MIDDLE_2_LENGTH];
     private JTextField[] outputFields = new JTextField[Tochka.OUTPUT_LENGTH];
 
+
     /**
      * コンストラクタ　文字の表示部分のみを初期化する
      *
@@ -99,8 +100,10 @@ public class ClientGUI extends javax.swing.JFrame implements MessageRecevable {
         this.myAI = null;
         this.jTextField2.setText(defaultIP);
         this.jTextField4.setText(defaultPort);
-        this.setTitle(WINDOW_TITLE + "(Lily 0)");
         this.initNNPanel();
+
+        this.setTitle(WINDOW_TITLE);
+
     }
 
     /**
