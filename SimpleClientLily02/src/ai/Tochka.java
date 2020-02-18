@@ -22,6 +22,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * <h1> Tochka </h1>
@@ -313,6 +315,8 @@ public class Tochka extends TajimaLabAI {
     }
 
     private Action neuralNet(NeuralInput input) {
+        // 入力をGUIで表示
+        this.gui.drawInput(input.getRowVal());
 
         // 1層目 畳み込む
         String in = input.getRowVal();
@@ -328,7 +332,9 @@ public class Tochka extends TajimaLabAI {
             }
         }
 
+        // 1層目をGUIで表示
         addMessage("[1st]: " + middle1Out);
+        this.gui.drawMiddle1(middle1Out);
 
         // 2層目 畳み込む
         for (int j = 0; j < MIDDLE_2_LENGTH; j++) {
@@ -343,7 +349,9 @@ public class Tochka extends TajimaLabAI {
             }
         }
 
+        // 2層目をGUIで表示
         addMessage("[1st]: " + middle2Out);
+        this.gui.drawMiddle2(middle2Out);
 
         // 出口 畳み込む
         output = new double[OUTPUT_LENGTH];
@@ -356,8 +364,8 @@ public class Tochka extends TajimaLabAI {
             output[j] = sum;
         }
         
-        // GUIに表示
-        this.gui.drawNetwork(input.getRowVal(), middle1Out, middle2Out, output);
+        // 出力をGUIで表示
+        this.gui.drawOutput(output);
 
         // 順位づけする
         Map<Action, Double> map = new HashMap<>();
@@ -399,7 +407,10 @@ public class Tochka extends TajimaLabAI {
         this.addMessage("==========================");
         this.addMessage("========== thinking ==========");
         this.addMessage("==========================");
-
+        
+        // guiのnetwork表示をリセット
+        this.gui.resetNetwork();
+        
         this.handCount += 1;
 
         Action bestAction = null;

@@ -44,7 +44,7 @@ import network.ServerConnecter;
 public class ClientGUI extends javax.swing.JFrame implements MessageRecevable {
 
     //ウィンドウタイトル
-    private static final String WINDOW_TITLE = "Tochka v3.0";
+    private static final String WINDOW_TITLE = "Tochka v6.0";
 
     //サーバとの通信クラス
     private ServerConnecter connecter;
@@ -251,6 +251,8 @@ public class ClientGUI extends javax.swing.JFrame implements MessageRecevable {
 
         nnPanel.setBackground(new java.awt.Color(255, 255, 255));
         nnPanel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        nnPanel.setMaximumSize(new java.awt.Dimension(2000, 2000));
+        nnPanel.setMinimumSize(new java.awt.Dimension(0, 0));
         nnPanel.setLayout(new javax.swing.BoxLayout(nnPanel, javax.swing.BoxLayout.LINE_AXIS));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -260,7 +262,6 @@ public class ClientGUI extends javax.swing.JFrame implements MessageRecevable {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(nnPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -309,7 +310,8 @@ public class ClientGUI extends javax.swing.JFrame implements MessageRecevable {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1)
                             .addComponent(jLabel9))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(nnPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -354,12 +356,12 @@ public class ClientGUI extends javax.swing.JFrame implements MessageRecevable {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel9)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(nnPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(nnPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 401, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -683,42 +685,74 @@ public class ClientGUI extends javax.swing.JFrame implements MessageRecevable {
         this.nnPanel.add(OutputJPanel);
     }
 
-    public void drawNetwork(String input, String middle1, String middle2, double[] output) {
+    public void resetNetwork() {
         for (int i = 0; i < Tochka.INPUT_LENGTH; i++) {
-            String s = input.substring(i, i+1);
+            this.inputFields[i].setText("0");
+            this.inputFields[i].setBackground(Color.WHITE);
+        }
+        for (int i = 0; i < Tochka.MIDDLE_1_LENGTH; i++) {
+            this.middle1Fields[i].setText("0");
+            this.middle1Fields[i].setBackground(Color.white);
+        }
+        for (int i = 0; i < Tochka.MIDDLE_2_LENGTH; i++) {
+            this.middle2Fields[i].setText("0");
+            this.middle2Fields[i].setBackground(Color.white);
+        }
+        for (int i = 0; i < Tochka.OUTPUT_LENGTH; i++) {
+            this.outputFields[i].setText("0");
+            this.outputFields[i].setBackground(Color.white);
+        }
+
+    }
+
+    public void drawNetwork(String input, String middle1, String middle2, double[] output) {
+        drawInput(input);
+        drawMiddle1(middle1);
+        drawMiddle2(middle2);
+        drawOutput(output);
+    }
+
+    public void drawInput(String input) {
+        for (int i = 0; i < Tochka.INPUT_LENGTH; i++) {
+            String s = input.substring(i, i + 1);
             this.inputFields[i].setText(input.substring(i, i + 1));
-            if(s.equals("1")) {
+            if (s.equals("1")) {
                 this.inputFields[i].setBackground(Color.red);
-            }
-            else {
+            } else {
                 this.inputFields[i].setBackground(Color.WHITE);
             }
         }
+    }
+
+    public void drawMiddle1(String middle1) {
         for (int i = 0; i < Tochka.MIDDLE_1_LENGTH; i++) {
-            String s = middle1.substring(i, i+1);
+            String s = middle1.substring(i, i + 1);
             this.middle1Fields[i].setText(s);
-            if(s.equals("1")) {
+            if (s.equals("1")) {
                 this.middle1Fields[i].setBackground(Color.red);
-            }
-            else {
+            } else {
                 this.middle1Fields[i].setBackground(Color.WHITE);
             }
         }
+    }
+
+    public void drawMiddle2(String middle2) {
         for (int i = 0; i < Tochka.MIDDLE_2_LENGTH; i++) {
-            String s = middle2.substring(i, i+1);
+            String s = middle2.substring(i, i + 1);
             this.middle2Fields[i].setText(s);
-            if(s.equals("1")){
+            if (s.equals("1")) {
                 this.middle2Fields[i].setBackground(Color.red);
-            }
-            else {
+            } else {
                 this.middle2Fields[i].setBackground(Color.white);
             }
         }
+    }
+
+    public void drawOutput(double[] output) {
         for (int i = 0; i < Tochka.OUTPUT_LENGTH; i++) {
             this.outputFields[i].setText(String.format("%1$.5f", output[i]));
         }
     }
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
