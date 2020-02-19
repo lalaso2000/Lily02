@@ -370,32 +370,36 @@ public class Tochka extends TajimaLabAI {
         this.gui.drawOutput(output);
 
         // 順位づけする
-        Map<Action, Double> map = new HashMap<>();
+        Map<Integer, Double> map = new HashMap<>();
         for (int i = 0; i < OUTPUT_LENGTH; i++) {
-            map.put(ACTIONS[i], output[i]);
+            map.put(i, output[i]);
         }
-        List<Map.Entry<Action, Double>> listEntrys = new ArrayList<Entry<Action, Double>>(map.entrySet());
-        Collections.sort(listEntrys, (Entry<Action, Double> o1, Entry<Action, Double> o2) -> o2.getValue().compareTo(o1.getValue()));
+        List<Map.Entry<Integer, Double>> listEntrys = new ArrayList<Entry<Integer, Double>>(map.entrySet());
+        Collections.sort(listEntrys, (Entry<Integer, Double> o1, Entry<Integer, Double> o2) -> o2.getValue().compareTo(o1.getValue()));
         addMessage("====output====");
-        for (Entry<Action, Double> entry : listEntrys) {
-            addMessage(entry.getKey() + ":" + entry.getValue());
+        for (Entry<Integer, Double> entry : listEntrys) {
+            addMessage(ACTIONS[entry.getKey()] + ":" + entry.getValue());
         }
-
+        
         // 上から順に打てるものを確認する
-        for (Entry<Action, Double> entry : listEntrys) {
-            Action a = entry.getKey();
+        for (Entry<Integer, Double> entry : listEntrys) {
+            Action a = ACTIONS[entry.getKey()];
             String w = a.worker;
             String p = a.place;
             String o = a.option;
             if (this.gameBoard.canPutWorker(myNumber, p, w, o)) {
+                this.gui.setOutputFieldsBorder(entry.getKey());
                 return a;
             } else if (this.gameBoard.canPutWorker(myNumber, p, "P", o)) {
+                this.gui.setOutputFieldsBorder(entry.getKey());
                 return new Action("P", p, o);
             }
         }
         if (this.gameBoard.canPutWorker(myNumber, "S", "1-1", "M")) {
+            this.gui.setOutputFieldsBorder(2);
             return new Action("S", "1-1", "M");
         } else {
+            this.gui.setOutputFieldsBorder(2);
             return new Action("P", "1-1", "M");
         }
     }

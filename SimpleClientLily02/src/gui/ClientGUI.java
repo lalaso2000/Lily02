@@ -13,6 +13,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridLayout;
@@ -40,6 +41,8 @@ import network.ServerConnecter;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import javax.swing.UIManager;
+import javax.swing.border.Border;
 
 /**
  *
@@ -745,7 +748,7 @@ public class ClientGUI extends javax.swing.JFrame implements MessageRecevable {
         JLabel l = new JLabel(name + ": ");
         p.add(l);
         JPanel cp = new JPanel();
-        cp.setLayout(new GridLayout(1, endIndex - beginIndex));
+        cp.setLayout(new FlowLayout(FlowLayout.LEFT));
         cp.setBackground(new Color(138, 230, 214));
         for (int i = beginIndex; i < endIndex; i++) {
             this.inputFields[i] = new JTextField("0", 1);
@@ -756,6 +759,7 @@ public class ClientGUI extends javax.swing.JFrame implements MessageRecevable {
     }
 
     public void resetNetwork() {
+        Border defalutBorder =  (Border) UIManager.getLookAndFeel().getDefaults().getBorder("TextField.border");
         for (int i = 0; i < Tochka.INPUT_LENGTH; i++) {
             this.inputFields[i].setText("0");
             this.inputFields[i].setBackground(Color.WHITE);
@@ -771,6 +775,7 @@ public class ClientGUI extends javax.swing.JFrame implements MessageRecevable {
         for (int i = 0; i < Tochka.OUTPUT_LENGTH; i++) {
             this.outputFields[i].setText("0");
             this.outputFields[i].setBackground(Color.white);
+            this.outputFields[i].setBorder(defalutBorder);
         }
 
     }
@@ -857,6 +862,10 @@ public class ClientGUI extends javax.swing.JFrame implements MessageRecevable {
             }
         }
 
+    }
+    
+    public void setOutputFieldsBorder(int i) {
+        this.outputFields[i].setBorder(new LineBorder(Color.yellow, 3, false));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
